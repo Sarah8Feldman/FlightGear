@@ -13,7 +13,7 @@ using namespace std;
 
 class Command {
 public:
-    virtual void execute(list<string>::iterator & it, list<string> & args) = 0;
+    virtual void execute(vector<string> vecCommand) = 0;
     virtual Command* create() = 0;
     virtual ~Command(){}
 };
