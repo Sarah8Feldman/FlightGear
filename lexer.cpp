@@ -10,7 +10,7 @@
 void Lexer::print(vector<string> vect) {
     auto it = vect.begin();
     for (it; it != vect.end(); it++)
-        std::cout << *it << ';';
+        std::cout << *it << ',';
 }
 
 bool Lexer::isOperator(char op) {
@@ -25,6 +25,17 @@ bool Lexer::isEqualOp(char op1, char op2) {
 bool Lexer::isArrow(char op1, char op2){
     return (((op1) == '-' && (op2 == '>')) || (op1 == '<') && (op2 == '-'));
 }
+
+string Lexer::expressionWithOutSpaces(std::__cxx11::string str) {
+    int i = 0;
+    string stringWithOutSpace = "";
+    while(i < str.size()){
+        if(str[i] != ' '){
+            stringWithOutSpace += str[i];
+        }
+        i++;
+    }
+}
 //inserts a parser in the right spaces
 string Lexer::insertParser (string str) {
     //push white space between spesific characters before we split to vector
@@ -34,13 +45,6 @@ string Lexer::insertParser (string str) {
     string mathExp = "";
     int counter = 0;
     int i =0;
-    //delet all white spases from the string
-    while(i < str.size()){
-        if(str[i] != ' '){
-            stringWithOutSpace += str[i];
-        }
-        i++;
-    }
 
     i=0;
     while(i < str.size()) {
@@ -53,60 +57,61 @@ string Lexer::insertParser (string str) {
                 isQuotation = false;
             }
         }
-        if(isArrow(stringWithOutSpace[i], stringWithOutSpace[i + 1])){
-            retStr += stringWithOutSpace[i];
-            retStr += stringWithOutSpace[i + 1];
+        if(isArrow(str[i], str[i + 1])){
+            retStr += str[i];
+            retStr += str[i + 1];
             i+=2;
         }
-        if(stringWithOutSpace[i] == '='){
+        if(str[i] == '='){
             i++;
-            while (i < stringWithOutSpace.size()){
+            stringWithOutSpace = expressionWithOutSpaces(str);
+            while (i < str.size()){
                 mathExp += stringWithOutSpace[i];
                 i++;
             }
             retStr += parser + mathExp + parser;
         }
 
-        if (!isQuotation && isEqualOp(stringWithOutSpace[i], stringWithOutSpace[i + 1])) {
-            retStr += stringWithOutSpace[i];
-            retStr += stringWithOutSpace[i + 1];
+        if (!isQuotation && isEqualOp(str[i], str[i + 1])) {
+            retStr += str[i];
+            retStr += str[i + 1];
             i+=2;
         }
-        if (isQuotation && isOperator(stringWithOutSpace[i])) {
-            retStr += "\"" + parser + stringWithOutSpace[i] + parser + "\"";
+        if (isQuotation && isOperator(str[i])) {
+            retStr += "\"" + parser + str[i] + parser + "\"";
         }
-        if (stringWithOutSpace[i] == '('){
-            while (stringWithOutSpace[i] != ','){
-                if(stringWithOutSpace[i] == ' '){
+        if (str[i] == '('){
+//            stringWithOutSpace = expressionWithOutSpaces(str);
+            while (str[i] != ','){
+                if(str[i] == ' '){
                     i++;
                 }
-                if (stringWithOutSpace[i] == '('){
+                if (str[i] == '('){
                     counter++;
                 }
-                if (stringWithOutSpace[i] == ')'){
+                if (str[i] == ')'){
                     counter--;
                 }
                 if(counter != 0){
-                    mathExp +=stringWithOutSpace[i];
+                    mathExp +=str[i];
                     i++;
                 }
                 if(counter == 0){
-                    mathExp +=stringWithOutSpace[i];
+                    mathExp +=str[i];
                     i++;
                     retStr += parser + mathExp + parser;
                     break;
-                    mathExp = "";
                 }
             }
         }
 
-        if (!isQuotation && isOperator(stringWithOutSpace[i])) {
-            retStr += parser + stringWithOutSpace[i] + parser;
+        if (!isQuotation && isOperator(str[i])) {
+            retStr += parser + str[i] + parser;
         }
 
         else {
-            if(stringWithOutSpace[i] != 0) {
-                retStr += stringWithOutSpace[i];
+            if(str[i] != 0) {
+                retStr += str[i];
             }
         }
         i++;
