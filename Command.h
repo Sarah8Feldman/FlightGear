@@ -13,7 +13,7 @@ using namespace std;
 
 class Command {
 public:
-    virtual void execute(vector<string> vecCommand) = 0;
+    void execute(vector<string> vecCommand);
     virtual ~Command(){}
 };
 
