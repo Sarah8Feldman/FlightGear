@@ -9,18 +9,16 @@
 #include "Parser.h"
 
 class ConnectCommand : public Command {
-//    Parser* parser;
-//    string theIpServer;
-//    bool checkIfIpIsValid(const std::vector<std::string> &) const;
-
+private:
+    vector<string> vecCommand;
+    int index;
+    string iP;
+    string sim;
 
 public:
-//    ConnectCommand(Parser* newParser) : parser(newParser) {};
-//    void execute(vector<string>::iterator &it);
+    ConnectCommand(vector<string> vecCommand, int index, string sim);
 
-
-    ConnectCommand();
-    void execute(list<string>::iterator & it, list<string> & args);
+    int execute();
     virtual ~ConnectCommand();
 
 };
