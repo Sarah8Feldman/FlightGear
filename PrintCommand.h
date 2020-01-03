@@ -20,7 +20,7 @@ private:
 public:
     PrintCommand(vector<string> vecPrint, int index);
 //    void to_string(string &value);
-    void execute();
+    int execute();
     virtual ~PrintCommand();
 };
 

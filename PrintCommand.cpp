@@ -14,7 +14,8 @@ PrintCommand::PrintCommand(vector<string> vecPrint, int index) {
 //    return to_string(value.call);
 //}
 
-void PrintCommand::execute() {
+int PrintCommand::execute() {
+    value = index;
 //    cout<<value->toString()<<endl;
     string str = this->vecPrint.at(value + 1);
     //if string then print it without the quotes.
@@ -31,6 +32,7 @@ void PrintCommand::execute() {
         cout << exp->calculate() << endl;
         delete (exp);
     }
+    return index + 2;
 }
 
 PrintCommand::~PrintCommand() {}

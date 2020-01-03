@@ -17,7 +17,7 @@ private:
 
 public:
     SleepCommand(vector<string> vecSleep, int index);
-    void execute();
+    int execute();
     bool checkIfValid(vector<string> vecString);
     virtual ~SleepCommand();
 

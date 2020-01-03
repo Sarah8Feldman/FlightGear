@@ -24,13 +24,14 @@ bool checkIfValid(vector<string> vecString) {
     }
 }
 
-void SleepCommand::execute() {
+int SleepCommand::execute() {
     if (checkIfValid(vector<string> {time})) {
         this->milliseconds = stoi(time);
     } else {
         throw "invalid Sleep Command";
     }
     std::this_thread::sleep_for(std::chrono::milliseconds(this->milliseconds));
+    return index + 2;
 }
 
 SleepCommand::~SleepCommand() {}
