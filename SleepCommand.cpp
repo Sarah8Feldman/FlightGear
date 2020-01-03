@@ -6,15 +6,10 @@
 #include <chrono>
 #include <thread>
 
-SleepCommand::SleepCommand() {}
-
-void SleepCommand::execute(vector<string> vecSleep, string &time) {
-    if (checkIfValid(vector<string> {time})) {
-        this->milliseconds = stoi(time);
-    } else {
-        throw "invalid Sleep Command";
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(this->milliseconds));
+SleepCommand::SleepCommand(vector<string> vecSleep, int index) {
+    this->vecSleep = vecSleep;
+    this->index = index;
+    this->time = vecSleep[index + 1];
 }
 
 bool checkIfValid(vector<string> vecString) {
@@ -27,6 +22,15 @@ bool checkIfValid(vector<string> vecString) {
     } catch (...) {
         return false;
     }
+}
+
+void SleepCommand::execute() {
+    if (checkIfValid(vector<string> {time})) {
+        this->milliseconds = stoi(time);
+    } else {
+        throw "invalid Sleep Command";
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(this->milliseconds));
 }
 
 SleepCommand::~SleepCommand() {}

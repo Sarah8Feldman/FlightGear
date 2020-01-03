@@ -5,14 +5,19 @@
 #ifndef STONEROAD1EX3_SLEEPCOMMAND_H
 #define STONEROAD1EX3_SLEEPCOMMAND_H
 
-#include "Command.h";
+#include "Command.h"
+#include <vector>
 
 class SleepCommand : public Command {
+private:
     int milliseconds;
+    vector<string> vecSleep;
+    string time;
+    int index;
 
 public:
-    SleepCommand();
-    void execute(vector<string> vecSleep, string &str);
+    SleepCommand(vector<string> vecSleep, int index);
+    void execute();
     bool checkIfValid(vector<string> vecString);
     virtual ~SleepCommand();
 
