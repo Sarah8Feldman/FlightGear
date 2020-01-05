@@ -2,14 +2,11 @@
 // Created by adi on 24/12/2019.
 //
 
-//#include <bits/socket_type.h>
-//#include <bits/socket.h>
 #include "ConnectCommand.h"
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <string>
 #include <iostream>
-#include <cstring>
 #include <string.h>
 #include <unistd.h>
 
@@ -17,10 +14,10 @@
 
 in_addr_t inet_addr();
 
-ConnectCommand::ConnectCommand(vector<string> vecCommand, int index, string sim) {
-    this->vecCommand = vecCommand;
+ConnectCommand::ConnectCommand(vector<string> vecConnect, int index, string sim) {
+    this->vecConnect = vecConnect;
     this->index = index;
-    string iP = vecCommand[index + 1];
+    string iP = vecConnect[index + 1];
     int port = index + 2;
     this->sim = sim;
 }
@@ -28,16 +25,21 @@ ConnectCommand::ConnectCommand(vector<string> vecCommand, int index, string sim)
 int ConnectCommand::execute() {
     //create socket
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-    if (clientSocket == -1) {
-        //error
-        std::cerr << "Could not create a socket"<<std::endl;
-        return -1;
-    }
+//    if (clientSocket == -1) {
+//        //error
+//        std::cerr << "Could not create a socket"<<std::endl;
+//        return -1;
+//    }
+
     //create a socket address object to hold address of server
     sockaddr_in address;
     address.sin_family = AF_INET; //IP4
     address.sin_addr.s_addr = inet_addr("127.0.0.1");//localhost
     address.sin_port = htons(index + 2);
+
+    while (clientSocket == -1) {
+        clientSocket = connect(clientSocket, (struct sockaddr *)&address, sizeof(address));
+    }
 
     //Requesting a connection with the server on local host with port.
     int is_connect = connect(clientSocket, (struct sockaddr *)&address, sizeof(address));

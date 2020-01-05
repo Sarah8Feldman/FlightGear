@@ -10,14 +10,13 @@
 
 class ConnectCommand : public Command {
 private:
-    vector<string> vecCommand;
+    vector<string> vecConnect;
     int index;
     string iP;
     string sim;
 
 public:
-    ConnectCommand(vector<string> vecCommand, int index, string sim);
-
+    ConnectCommand(vector<string> vecConnect, int index, string sim);
     int execute();
     virtual ~ConnectCommand();
 
