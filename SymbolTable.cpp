@@ -5,10 +5,10 @@
 #include <cstring>
 #include <unistd.h>
 
-
-SymbolTable::SymbolTable(pthread_mutex_t * mutex) {
-    this->mutex = mutex;
-}
+//
+//SymbolTable::SymbolTable() {
+//    this->mutex = mutex;
+//}
 void SymbolTable::updatePathValue(vector<string> values) {
     pthread_mutex_lock(this->mutex);
     pathsToValue.at("/instrumentation/airspeed-indicator/indicated-speed-kt") = values [0];

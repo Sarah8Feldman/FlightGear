@@ -12,8 +12,8 @@ bool WhileCommand::checkCondition() {
     string op = vect[index + 2];
     string right = vect[index + 3];
     Interpreter interpreter;
-    double leftExp = interpreter.interpret(left)->calculate();
-    double rightExp = interpreter.interpret(right)->calculate();
+    double leftExp = ExpressionCommand::interpertExpression(left);
+    double rightExp = ExpressionCommand::interpertExpression(right);
     if(op == ">"){
         if( leftExp > rightExp){
             return true;
@@ -47,11 +47,12 @@ bool WhileCommand::checkCondition() {
     return false;
 }
 int WhileCommand::execute() {
-    if (checkCondition()) {
+    int i = index + 5;
+    while (checkCondition()) {
         unordered_map<string, Command*>::iterator it;
-        VarMap map;
-        unordered_map<string, Command*> vars = map.getVarMap();
-        int i = index + 5;
+        commandMap map;
+        unordered_map<string, Command*> vars = map.getCommandsMap();
+//        int i = index + 5;
         while (vect[i] != "}") {
             it = vars.find(vect[i]);
             if (it != vars.end()){
@@ -60,4 +61,5 @@ int WhileCommand::execute() {
             i++;
         }
     }
+    return i;
 }

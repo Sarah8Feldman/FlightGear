@@ -268,6 +268,12 @@ bool Interpreter::isBinOperation (const char c){
     }
     return false;
 }
+bool Interpreter::isOperation (const char c){
+    if (c ==  '+' || c == '-' || c == '*' || c == '/' || c == '=' || c == '<=' || c == '>=' || c == '>' || c =='<'){
+        return true;
+    }
+    return false;
+}
 
 bool Interpreter::isBrakets (const char c){
     if (c ==  '(' || c == ')'){
@@ -369,6 +375,15 @@ Expression* Interpreter::interpret(const string inputExpr) {
             if (nc == '-' || nc == '+'){
                 probableUnarOper=true;
             }
+        } else if (isOperation(cc)) {
+            if (nc == '-' || nc == '+'){
+                probableUnarOper=true;
+            }
+        } else if (isBinOperation(cc) ) {
+            if (nc == '-' || nc == '+'){
+                probableUnarOper=true;
+            }
+
             operStack.push(cc);
 //    		cout<<"Left P: "<<cc<<endl;
         } else if (cc == rightBr) {

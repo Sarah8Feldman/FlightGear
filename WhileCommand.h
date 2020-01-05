@@ -6,9 +6,9 @@
 #define LEXER_WHILECOMMAND_H
 #include "Command.h"
 #include "ex1.h"
-#include "VarMap.h"
+#include "commandMap.h"
 #include "unordered_map"
-
+#include "ExpressionCommand.h"
 class WhileCommand : Command {
 private:
     vector<string> vect;

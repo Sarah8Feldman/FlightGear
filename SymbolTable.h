@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include "Var.h"
 #include "DefineVarCommand.h"
-#include
+
 
 
 class SymbolTable {
@@ -17,7 +17,7 @@ private:
     pthread_mutex_t * mutex;
     int socket;
 public:
-    SymbolTable(pthread_mutex_t * mutex);
+    SymbolTable();
     unordered_map<string,string> nameToPath;
     unordered_map<string, string> varesWithoutPath;
 //    unordered_map<string, Var> pathToVar;
@@ -75,5 +75,7 @@ public:
     bool isVarSetsServer(string val);
 };
 
+extern SymbolTable* myTable;
+SymbolTable* myTable = new SymbolTable();
 
 #endif //LEXER_SYMBOLTABLE_H

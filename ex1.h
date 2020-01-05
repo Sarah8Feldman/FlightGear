@@ -11,6 +11,7 @@
 #include <queue>
 #include "Expression.h"
 #include "iostream"
+#include "SymbolTable.h"
 
 using namespace std;
 
@@ -143,6 +144,8 @@ public:
     void setVariables(const string& variables);
     Expression* interpret(string infix);
     virtual  ~Interpreter();
+
+    bool isOperation(const char c);
 };
 
 
