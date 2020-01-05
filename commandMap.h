@@ -9,6 +9,8 @@
 #include "Command.h"
 #include "IfCommand.h"
 #include "WhileCommand.h"
+#include "SymbolTable.h"
+extern SymbolTable* myTable;
 
 class commandMap {
 private:
@@ -24,6 +26,7 @@ private:
     };
 public:
     unordered_map<string, Command*> getCommandsMap();
+    virtual ~commandMap();
 };
 
 

@@ -6,7 +6,6 @@
 #define LEXER_DEFINEVARCOMMAND_H
 
 #include "Command.h"
-#include "Var.h"
 #include "SymbolTable.h"
 #include "unordered_map"
 #include "ex1.h"
@@ -23,6 +22,7 @@ private:
 public:
     DefineVarCommand(vector<string> vect, int index);
     int execute();
+    virtual ~DefineVarCommand();
 
 };
 

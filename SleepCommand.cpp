@@ -25,8 +25,10 @@ bool checkIfValid(vector<string> vecString) {
 }
 
 int SleepCommand::execute() {
+
     if (checkIfValid(vector<string> {time})) {
-        this->milliseconds = stoi(time);
+        int myTime = ExpressionCommand::interpertExpression(time);
+        this->milliseconds = myTime;
     } else {
         throw "invalid Sleep Command";
     }

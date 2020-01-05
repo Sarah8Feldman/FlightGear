@@ -13,3 +13,4 @@ double ExpressionCommand::interpertExpression(string str){
     }
     return interpreter.interpret(str)->calculate();
 }
+ExpressionCommand::~ExpressionCommand() {}

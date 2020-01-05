@@ -16,6 +16,7 @@ extern SymbolTable* myTable;
 class ExpressionCommand {
 public:
     static double interpertExpression(string str);
+    virtual ~ExpressionCommand();
 };
 
 

@@ -21,6 +21,7 @@ public:
     vector<string> splitStringToVector(string str);
     vector<string> createVectorFromLine(string str);
     vector<string> createVectorFromFile(string fileName);
+    virtual ~Lexer();
 
 
 

@@ -63,3 +63,5 @@ int WhileCommand::execute() {
     }
     return i;
 }
+
+WhileCommand::~WhileCommand(){}

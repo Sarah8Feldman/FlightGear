@@ -9,6 +9,8 @@
 #include "commandMap.h"
 #include "unordered_map"
 #include "ExpressionCommand.h"
+extern SymbolTable* myTable;
+
 class IfCommand:Command {
 private:
     vector<string> vect;

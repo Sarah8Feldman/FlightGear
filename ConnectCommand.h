@@ -6,7 +6,9 @@
 #define STONEROAD1EX3_CONNECTCOMMAND_H
 
 #include "Command.h"
+#include "ExpressionCommand.h"
 #include "Parser.h"
+extern SymbolTable* myTable;
 
 class ConnectCommand : public Command {
 private:
@@ -16,10 +18,11 @@ private:
     string sim;
 
 public:
-    ConnectCommand(vector<string> vecConnect, int index, string sim);
+    ConnectCommand(vector<string> vecConnect, int index);
     int execute();
     virtual ~ConnectCommand();
 
+    Void runThread();
 };
 
 

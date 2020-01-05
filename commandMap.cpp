@@ -6,3 +6,4 @@
 unordered_map<string, Command*> commandMap::getCommandsMap() {
     return varMap;
 }
+commandMap::~commandMap(){}

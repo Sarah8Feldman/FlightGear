@@ -6,7 +6,8 @@
 #define STONEROAD1EX3_OPENSERVERCOMMAND_H
 
 #include "Command.h"
-#include "Parser.h"
+#include "SymbolTable.h"
+extern SymbolTable* myTable;
 
 class OpenServerCommand : public Command {
 private:
@@ -16,10 +17,12 @@ private:
     string sim;
 
 public:
-    OpenServerCommand(vector<string> vecOpenServer, int index, string sim);
+    OpenServerCommand(vector<string> vecOpenServer, int index);
     int execute();
     virtual ~OpenServerCommand();
-
+    void runThread();
+    string bufferToString(char *buff);
+    vector<string> stringToVector(string str);
 };
 
 

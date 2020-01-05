@@ -10,7 +10,7 @@
 #include <unistd.h>
 #include <netinet/in.h>
 
-OpenServerCommand::OpenServerCommand(vector<string> vecOpenServer, int index, string sim) {
+OpenServerCommand::OpenServerCommand(vector<string> vecOpenServer, int index) {
     this->vecOpenServer = vecOpenServer;
     this->index = index;
     string iP = vecOpenServer[index + 1];
@@ -19,14 +19,13 @@ OpenServerCommand::OpenServerCommand(vector<string> vecOpenServer, int index, st
 }
 
 int OpenServerCommand::execute() {
+    myTable->serverThread = thread(&OpenServerCommand::runThread, this);
+    return index + 3;
+}
+
+void OpenServerCommand::runThread(){
     //create socket
     int serverSocket = socket(AF_INET, SOCK_STREAM, 0);
-
-//    if (serverSocket == -1) {
-//        //error
-//        std::cerr << "Could not create a socket"<<std::endl;
-//        return -1;
-//    }
 
     //bind socket to IP address. creating a socket address object.
     sockaddr_in address;
@@ -35,14 +34,12 @@ int OpenServerCommand::execute() {
     address.sin_port = htons(index + 2);
 
     if (bind(serverSocket, (struct sockaddr *)&address, sizeof(address)) == -1) {
-        std::cerr<<"Could not bind the socket to an IP"<<std::endl;
-        return -2;
+        std::cerr << "Could not bind the socket to an IP" << std::endl;
     }
 
     //making socket listen to the port
     if(listen(serverSocket, 5) == -1) {
         std::cerr<<"Error during listening command"<<std::endl;
-        return -3;
     }
 
     int client_socket = accept(serverSocket, (struct sockaddr *)&address, (socklen_t*)&address);
@@ -51,26 +48,46 @@ int OpenServerCommand::execute() {
         serverSocket = accept(serverSocket, (struct sockaddr *)&address, (socklen_t*)&address);
     }
 
-    if (client_socket == -1) {
-        std::cerr<<"Error accepting client"<<std::endl;
-        return -4;
-    }
-
-    close(serverSocket);
     //reading from client
     char buffer[1024] = {0};
-    int valueRead = read(client_socket, buffer, 1024);
-    std::cout<<buffer<<std::endl;
+    read(client_socket, buffer, 1024);
+    string str = bufferToString(buffer);
+    vector<string> vec = stringToVector(str);
+    myTable->updatePathValue(vec);
 
-    //string to char
-    std::string str = "string";
-    char *sim = new char[str.length() + 1];
-    strcpy(sim, str.c_str());
-
-    //writing back to client
-    send(client_socket, sim, strlen(sim), 0);
-    std::cout<<"Hello message sent\n"<<std::endl;
-    return 0;
-
+    close(serverSocket);
 }
+
+string OpenServerCommand::bufferToString(char *buff){
+    int i = 0;
+    string str = "";
+    if(buff[0] == '\n'){
+        i++;
+    }
+    while (buff[i] != '\n'){
+        str.push_back(buff[i]);
+        i++;
+    }
+    return str;
+}
+
+vector<string> OpenServerCommand::stringToVector(string str){
+    char parser = ',';
+    int index = str.find(parser);
+    vector<string> vect;
+    //index is not in the end of string
+    if (index != string::npos) {
+        string pushStr = str.substr(0, index);
+        vect.push_back(pushStr);
+        str = str.substr(index + parser.size());
+        if (str.size() == 0) {
+            vect.push_back(str);
+        }
+    } else {
+        vect.push_back(str);
+        str = "";
+    }
+}
+OpenServerCommand::~OpenServerCommand(){}
+
 

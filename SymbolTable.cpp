@@ -66,20 +66,20 @@ void SymbolTable::updateNameToPath(std::__cxx11::string name, std::__cxx11::stri
 //When arrow is ->
 void SymbolTable:: setValuetoServer(string name, double value){
     pthread_mutex_lock(this->mutex);
-    if (nameToPath.count(name) > 0){
-        pathsToValue[nameToPath.at(name)] = value;
-        char writeToServer[500] = "set ";
-        strcat(writeToServer, nameToPath.at(name).c_str());
-        strcat(writeToServer, " ");
-        strcat(writeToServer, to_string(value).c_str());
-        strcat(writeToServer, "\r\n");
-        int n = write(this->socket, writeToServer, strlen(writeToServer));
-    if (n < 0) {
-    throw "Error writing to socket";
-        }
-    } else {
-        pathsToValue[name] = value;
-    }
+//    if (nameToPath.count(name) > 0){
+//        pathsToValue[nameToPath.at(name)] = value;
+//        char writeToServer[500] = "set ";
+//        strcat(writeToServer, nameToPath.at(name).c_str());
+//        strcat(writeToServer, " ");
+//        strcat(writeToServer, to_string(value).c_str());
+//        strcat(writeToServer, "\r\n");
+//        int n = write(this->socket, writeToServer, strlen(writeToServer));
+//    if (n < 0) {
+//    throw "Error writing to socket";
+//        }
+//    } else {
+//        pathsToValue[name] = value;
+//    }
     pthread_mutex_unlock(this->mutex);
 }
 void SymbolTable::updateVaresWithoutPath(string name, string val){
@@ -93,4 +93,4 @@ void SymbolTable::updateVaresWithoutPath(string name, string val){
 bool SymbolTable::isVarSetsServer(string val){
     return nameToPath.count(val) > 0;
 }
-
+SymbolTable::~SymbolTable(){}

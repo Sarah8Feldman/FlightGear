@@ -6,8 +6,9 @@
 #define LEXER_SYMBOLTABLE_H
 
 #include <unordered_map>
-#include "Var.h"
 #include "DefineVarCommand.h"
+#include "deque"
+#include "thread"
 
 
 
@@ -17,7 +18,10 @@ private:
     pthread_mutex_t * mutex;
     int socket;
 public:
+    thread clientTread;
+    thread serverThread;
     SymbolTable();
+    queue<string> sendToServerQueue;
     unordered_map<string,string> nameToPath;
     unordered_map<string, string> varesWithoutPath;
 //    unordered_map<string, Var> pathToVar;
@@ -73,6 +77,9 @@ public:
     Void updateVaresWithoutPath(string name, string val);
 
     bool isVarSetsServer(string val);
+    virtual ~SymbolTable();
+
+
 };
 
 extern SymbolTable* myTable;

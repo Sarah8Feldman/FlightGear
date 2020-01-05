@@ -186,5 +186,6 @@ vector<string> Lexer::createVectorFromFile(string fileName) {
     in_file.close(); //close the file object
     return finalVec;
 }
+Lexer::~Lexer(){}
 
 

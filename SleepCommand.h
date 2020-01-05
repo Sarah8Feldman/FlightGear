@@ -7,6 +7,8 @@
 
 #include "Command.h"
 #include <vector>
+#include "ExpressionCommand.h"
+extern SymbolTable* myTable;
 
 class SleepCommand : public Command {
 private:

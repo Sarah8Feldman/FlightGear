@@ -10,27 +10,22 @@ PrintCommand::PrintCommand(vector<string> vecPrint, int index) {
     this->index = index;
 }
 
-//string PrintCommand::to_string(double value) {
-//    return to_string(value.call);
-//}
-
 int PrintCommand::execute() {
-    value = index;
 //    cout<<value->toString()<<endl;
-    string str = this->vecPrint.at(value + 1);
+    string str = this->vecPrint.at(index + 1);
+    bool isString;
     //if string then print it without the quotes.
+    //34 is " in ascii
+    string temp = "";
     if (str.at(0) == 34) {
-        string temp = "";
         for (int i = 1; i < str.length() - 1; i++) {
             temp += str.at(i);
         }
         cout << temp << endl;
         //convert the string to an Expression and print it if a legal one.
     } else {
-        Interpreter interp;
-        Expression *exp = interp.interpret(str);
-        cout << exp->calculate() << endl;
-        delete (exp);
+        double exp = ExpressionCommand::interpertExpression(str);
+        cout << exp << endl;
     }
     return index + 2;
 }

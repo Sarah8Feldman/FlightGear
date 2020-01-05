@@ -10,11 +10,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#define PORT 8081
-
 in_addr_t inet_addr();
 
-ConnectCommand::ConnectCommand(vector<string> vecConnect, int index, string sim) {
+ConnectCommand::ConnectCommand(vector<string> vecConnect, int index) {
     this->vecConnect = vecConnect;
     this->index = index;
     string iP = vecConnect[index + 1];
@@ -23,13 +21,15 @@ ConnectCommand::ConnectCommand(vector<string> vecConnect, int index, string sim)
 }
 
 int ConnectCommand::execute() {
+
+    myTable->clientTread = thread(&ConnectCommand::runThread, this);
+
+    return index + 3;
+}
+
+void ConnectCommand::runThread(){
     //create socket
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
-//    if (clientSocket == -1) {
-//        //error
-//        std::cerr << "Could not create a socket"<<std::endl;
-//        return -1;
-//    }
 
     //create a socket address object to hold address of server
     sockaddr_in address;
@@ -45,29 +45,22 @@ int ConnectCommand::execute() {
     int is_connect = connect(clientSocket, (struct sockaddr *)&address, sizeof(address));
     if (is_connect == -1) {
         std::cerr << "Could not connect to host server"<<std::endl;
-        return -2;
     } else {
         std::cout<<"Client is now connected to server" <<std::endl;
     }
-    //string to char
-    std::string str = "string";
-    char *sim = new char[str.length() + 1];
-    strcpy(sim, str.c_str());
-
-    //if they were able to connection
-    int is_sent = send(clientSocket, sim, strlen(sim), 0);
-    if (is_sent == -1) {
-        std::cout<<"Error sending message"<<std::endl;
-    } else {
-        std::cout<<"Hello message sent to server" <<std::endl;
-    }
-
-    char buffer[1024] = {0};
-    int valueRead = read(clientSocket, buffer, 1024);
-    std::cout<<buffer<<std::endl;
-
+    string name = myTable->sendToServerQueue.front();
+    double value = myTable->pathsToValue[myTable->nameToPath[name]];
+    char writeToServer[500] = "set ";
+    strcat(writeToServer, myTable->nameToPath.at(name).c_str());
+    strcat(writeToServer, " ");
+    strcat(writeToServer, to_string(value).c_str());
+    strcat(writeToServer, "\r\n");
+    int n = write(clientSocket, writeToServer, strlen(writeToServer));
+    if (n < 0) {
+        throw "Error writing to socket";
+        }
+    myTable->sendToServerQueue.pop();
     close(clientSocket);
-    return 0;
-}
+    }
 
 ConnectCommand::~ConnectCommand() {}

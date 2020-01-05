@@ -9,6 +9,8 @@
 #include "commandMap.h"
 #include "unordered_map"
 #include "ExpressionCommand.h"
+extern SymbolTable* myTable;
+
 class WhileCommand : Command {
 private:
     vector<string> vect;
@@ -19,6 +21,7 @@ public:
     virtual int execute();
     virtual ~WhileCommand();
     bool checkCondition();
+
 };
 
 #endif //LEXER_WHILECOMMAND_H

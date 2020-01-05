@@ -10,6 +10,8 @@
 #include "Expression.h"
 #include "ex1.h"
 #include <vector>
+#include "ExpressionCommand.h"
+extern SymbolTable* myTable;
 
 class PrintCommand : public Command {
 private:

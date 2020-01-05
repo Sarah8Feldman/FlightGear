@@ -63,3 +63,4 @@ int IfCommand::execute() {
         }
     } return i;
 }
+IfCommand::~IfCommand(){}

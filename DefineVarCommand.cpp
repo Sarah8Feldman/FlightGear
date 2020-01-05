@@ -36,8 +36,10 @@ int reVal = index;
         string name = vec[index];
         double value = stod(vec[index + 2]);
         myTable->pathsToValue[myTable->nameToPath[name]]= value;
-        myTable->setValuetoServer(name, value);
+        myTable->sendToServerQueue.push(name);
+//        myTable->setValuetoServer(name, value);
         reVal = index + 3;
     }
     return reVal;
 }
+DefineVarCommand::~DefineVarCommand(){}
