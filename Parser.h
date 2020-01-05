@@ -6,28 +6,38 @@
 #define STONEROAD1EX3_PARSER_H
 
 #include "Command.h"
-//#include "Lexer.h"
+#include "Lexer.h"
+#include "ConnectCommand.h"
+#include "OpenServerCommand.h"
+#include "SleepCommand.h"
+#include "PrintCommand.h"
+#include "Expression.h"
+#include "ex1.h"
+#include "commandMap.h"
 #include <string>
 #include <vector>
 #include <map>
 #include <iterator>
 #include <list>
 
-class Parser {
+class Parser : public Command {
+private:
+    vector<string> vecParser;
+    int index;
 //    Parser* parser;
 //    vector<string> condition;
 //    vector<string> backupCondition;
 //    vector<string> InsideTheBrackets;
 
     static map<string,Command*> commandMap;
-    Command* getCommandFromString(string string1);
+    Command* getCommandFromString(string str);
 
 public:
 //    Parser(Parser* newParser);
 //    virtual void execute(vector<string>::iterator &it);
 
-    Parser();
-    static void execute();
+    Parser(vector<string> vecParser, int index);
+    int execute();
     void parser(list<string> elements);
     virtual ~Parser();
 };

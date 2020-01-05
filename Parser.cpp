@@ -3,7 +3,8 @@
 //
 
 #include "Parser.h"
-#include "Interpreter.h"
+#include "InterpreterEx3.h"
+
 #include <iostream>
 using namespace std;
 
@@ -41,36 +42,39 @@ Command* Parser::getCommandFromString(string str) {
 }
 
 
-Parser::Parser() {}
+Parser::Parser(vector<string> vecParser, int index) {
+    this->vecParser = vecParser;
+    this->index = index;
+}
 
-void Parser::execute() {
+int Parser::execute() {
     Parser::commandMap = {
-            {"openDataServer", new OpenServerCommandFactory()},
-            {"connect", new ConnectCommandFactory()},
-            {"var", new VarCommandFactory()},
-            {"if", new IfCommandFactory()},
-            {"while", new WhileCommandFactory()},
-            {"sleep", new SleepCommandFactory()},
-            {"print", new PrintCommandFactory()}
+            {"openDataServer", new OpenServerCommand()},
+            {"connect", new ConnectCommand()},
+            {"var", new VarCommand},
+            {"if", new IfCommand()},
+            {"while", new WhileCommand()},
+            {"sleep", new SleepCommand()},
+            {"print", new PrintCommand()}
 
     };
 }
 
 void Parser::parser(list<string> elements) {
-    list<string>::iterator it = elements.begin();
+    list<string>::iterator iterStart = elements.begin();
     Command* currentCommand;
-    while (it != elements.end()) {
-        currentCommand = Interpreter::getParser().getCommandFromString(*it);
+    while (iterStart != elements.end()) {
+        currentCommand = InterpreterEx3::getParser().getCommandFromString(*iterStart);
         if (currentCommand == nullptr) {
-            if (ToolBox::getSymbolTable().getVariable(*it) != nullptr) {
+            if (ToolBox::getSymbolTable().getVariable(*iterStart) != nullptr) {
                 currentCommand = new SetVarCommand();
             } else {
-                throw "Not Valid Command " + *it;
+                throw "Not Valid Command " + *iterStart;
             }
         } else {
-            it++;
+            iterStart++;
         }
-        currentCommand->doCommand(it, elements);
+        currentCommand->execute(iterStart, elements);
         delete currentCommand;
     }
 }
