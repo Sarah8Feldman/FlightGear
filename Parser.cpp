@@ -31,15 +31,15 @@ using namespace std;
 //    }
 //}
 
-map<string, Command*> Parser::commandMap;
+//map<string, Command*> Parser::commandMap;
 
-Command* Parser::getCommandFromString(string str) {
-    if (commandMap.count(str) == 0) {
-        return nullptr;
-    } else {
-        return commandMap[str]->create();
-    }
-}
+//Command* Parser::getCommandFromString(string str) {
+//    if (commandMap.count(str) == 0) {
+//        return nullptr;
+//    } else {
+//        return commandMap[str]->create();
+//    }
+//}
 
 
 Parser::Parser(vector<string> vecParser, int index) {
@@ -47,36 +47,82 @@ Parser::Parser(vector<string> vecParser, int index) {
     this->index = index;
 }
 
-int Parser::execute() {
-    Parser::commandMap = {
-            {"openDataServer", new OpenServerCommand()},
-            {"connect", new ConnectCommand()},
-            {"var", new VarCommand},
-            {"if", new IfCommand()},
-            {"while", new WhileCommand()},
-            {"sleep", new SleepCommand()},
-            {"print", new PrintCommand()}
+//int Parser::execute() {
+//    Parser::commandMap = {
+//            {"openDataServer", new OpenServerCommand()},
+//            {"connect", new ConnectCommand()},
+//            {"var", new VarCommand},
+//            {"if", new IfCommand()},
+//            {"while", new WhileCommand()},
+//            {"sleep", new SleepCommand()},
+//            {"print", new PrintCommand()}
+//
+//    };
+//}
 
-    };
-}
+bool Parser::parser() {
 
-void Parser::parser(list<string> elements) {
-    list<string>::iterator iterStart = elements.begin();
-    Command* currentCommand;
-    while (iterStart != elements.end()) {
-        currentCommand = InterpreterEx3::getParser().getCommandFromString(*iterStart);
-        if (currentCommand == nullptr) {
-            if (ToolBox::getSymbolTable().getVariable(*iterStart) != nullptr) {
-                currentCommand = new SetVarCommand();
-            } else {
-                throw "Not Valid Command " + *iterStart;
-            }
-        } else {
-            iterStart++;
+    this->index = 0;
+    string currentCommand;
+    //execute only if it is a command.
+    while (index < this->vecParser.size()) {
+        currentCommand = this->vecParser[index];
+        //It is not a command. continue to next iteration.
+        if (this->commandMap.find(currentCommand) == commandMap.end()) {
+           index =  DefineVarCommand(vecParser, index).execute();
         }
-        currentCommand->execute(iterStart, elements);
-        delete currentCommand;
+        //It's a command. index moved as many as the command args.
+        Command *command = this->commandMap.find(currentCommand)->second;
+        index = command->execute();
     }
+
+
+//    auto it = mp.getCommandsMap().begin();
+//    for ( it; it != mp.getCommandsMap().end(); it++ )
+//    {
+//
+//    }
+//
+//
+//
+//    if (vecParser[index] == mp.getCommandsMap().begin()) {
+//        commandMap(execute());
+//    }
+
+
+//    map<string, Command*> mapPar;
+//    map<string, Command*>::iterator iter = mapPar.begin();
+//    while (iter != mapPar.end()) {
+//        // Accessing KEY from element pointed by it.
+//        string word = iter->first;
+//
+//        // Accessing VALUE from element pointed by it.
+//        Command* count = iter->second;
+//    }
+
+
+
+
+
+//    if (index == commandMap.begin())
+
+
+//    list<string>::iterator iterStart = elements.begin();
+//    Command* currentCommand;
+//    while (iterStart != elements.end()) {
+//        currentCommand = InterpreterEx3::getParser().getCommandFromString(*iterStart);
+//        if (currentCommand == nullptr) {
+//            if (ToolBox::getSymbolTable().getVariable(*iterStart) != nullptr) {
+//                currentCommand = new SetVarCommand();
+//            } else {
+//                throw "Not Valid Command " + *iterStart;
+//            }
+//        } else {
+//            iterStart++;
+//        }
+//        currentCommand->execute(iterStart, elements);
+//        delete currentCommand;
+//    }
 }
 
 Parser::~Parser() {}

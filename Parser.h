@@ -14,6 +14,8 @@
 #include "Expression.h"
 #include "ex1.h"
 #include "commandMap.h"
+#include "DefineVarCommand.h"
+#include "SymbolTable.h"
 #include <string>
 #include <vector>
 #include <map>
@@ -24,21 +26,14 @@ class Parser : public Command {
 private:
     vector<string> vecParser;
     int index;
-//    Parser* parser;
-//    vector<string> condition;
-//    vector<string> backupCondition;
-//    vector<string> InsideTheBrackets;
-
-    static map<string,Command*> commandMap;
-    Command* getCommandFromString(string str);
+    map<string, Command*> commandMap;
+//    Command* getCommandFromString(string str);
 
 public:
-//    Parser(Parser* newParser);
-//    virtual void execute(vector<string>::iterator &it);
-
+    commandMap mp;
     Parser(vector<string> vecParser, int index);
-    int execute();
-    void parser(list<string> elements);
+//    int execute();
+    bool parser();
     virtual ~Parser();
 };
 
