@@ -5,10 +5,10 @@
 #include <cstring>
 #include <unistd.h>
 
-//
-//SymbolTable::SymbolTable() {
-//    this->mutex = mutex;
-//}
+/**
+ * this map updates from the server
+ * @param values vector from the buffer
+ */
 void SymbolTable::updatePathValue(vector<string> values) {
     pthread_mutex_lock(this->mutex);
     pathsToValue.at("/instrumentation/airspeed-indicator/indicated-speed-kt") = values [0];
@@ -50,10 +50,11 @@ void SymbolTable::updatePathValue(vector<string> values) {
     pthread_mutex_unlock(this->mutex);
 }
 
-void SymbolTable::setSocket(int mysocket) {
-    this->socket = mysocket;
-}
-
+/**
+ * update the name->path in simulator map
+ * @param name of variable
+ * @param path variables path
+ */
 void SymbolTable::updateNameToPath(std::__cxx11::string name, std::__cxx11::string path) {
     pthread_mutex_lock(this->mutex);
     nameToPath[name] = path;
@@ -63,34 +64,19 @@ void SymbolTable::updateNameToPath(std::__cxx11::string name, std::__cxx11::stri
     }
     pthread_mutex_unlock(this->mutex);
 }
-//When arrow is ->
-void SymbolTable:: setValuetoServer(string name, double value){
-    pthread_mutex_lock(this->mutex);
-//    if (nameToPath.count(name) > 0){
-//        pathsToValue[nameToPath.at(name)] = value;
-//        char writeToServer[500] = "set ";
-//        strcat(writeToServer, nameToPath.at(name).c_str());
-//        strcat(writeToServer, " ");
-//        strcat(writeToServer, to_string(value).c_str());
-//        strcat(writeToServer, "\r\n");
-//        int n = write(this->socket, writeToServer, strlen(writeToServer));
-//    if (n < 0) {
-//    throw "Error writing to socket";
-//        }
-//    } else {
-//        pathsToValue[name] = value;
-//    }
-    pthread_mutex_unlock(this->mutex);
-}
+/**
+ * update the map of the variables that are not from\in the simulator
+ * @param name of variable
+ * @param val its value
+ */
 void SymbolTable::updateVaresWithoutPath(string name, string val){
-    //
     if(nameToPath.count(val) == 0) {
         varesWithoutPath[name] = val;
     } else{
         varesWithoutPath[name] = pathsToValue.at(nameToPath[val]);
     }
 }
-bool SymbolTable::isVarSetsServer(string val){
-    return nameToPath.count(val) > 0;
-}
+/**
+ * destructor
+ */
 SymbolTable::~SymbolTable(){}

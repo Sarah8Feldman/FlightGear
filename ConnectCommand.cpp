@@ -10,8 +10,12 @@
 #include <string.h>
 #include <unistd.h>
 
-in_addr_t inet_addr();
 
+/**
+ * ConnectCommand is a command in which we send and update values to the simulator
+ * @param vecConnect vector from lexer
+ * @param index in vector
+ */
 ConnectCommand::ConnectCommand(vector<string> vecConnect, int index) {
     this->vecConnect = vecConnect;
     this->index = index;
@@ -19,14 +23,21 @@ ConnectCommand::ConnectCommand(vector<string> vecConnect, int index) {
     int port = index + 2;
     this->sim = sim;
 }
-
+/**
+ *
+ * @return the index of the next command
+ */
 int ConnectCommand::execute() {
-
+    //create a separate thread for sending values to simulator
     myTable->clientTread = thread(&ConnectCommand::runThread, this);
-
+//    in fly.txt:
+//    connectControlClient("127.0.0.1",5402)
+// index   0                   1         2
     return index + 3;
 }
-
+/**
+ * Runs the thread
+ */
 void ConnectCommand::runThread(){
     //create socket
     int clientSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -36,7 +47,7 @@ void ConnectCommand::runThread(){
     address.sin_family = AF_INET; //IP4
     address.sin_addr.s_addr = inet_addr("127.0.0.1");//localhost
     address.sin_port = htons(index + 2);
-
+//  when not able to connect - try again
     while (clientSocket == -1) {
         clientSocket = connect(clientSocket, (struct sockaddr *)&address, sizeof(address));
     }
@@ -48,8 +59,11 @@ void ConnectCommand::runThread(){
     } else {
         std::cout<<"Client is now connected to server" <<std::endl;
     }
+    //all names variable for updating the simulator are in a queue
     string name = myTable->sendToServerQueue.front();
+    //the values of the variables are in the maps
     double value = myTable->pathsToValue[myTable->nameToPath[name]];
+    //write to the server
     char writeToServer[500] = "set ";
     strcat(writeToServer, myTable->nameToPath.at(name).c_str());
     strcat(writeToServer, " ");
@@ -62,5 +76,7 @@ void ConnectCommand::runThread(){
     myTable->sendToServerQueue.pop();
     close(clientSocket);
     }
-
+/**
+ * destructor
+ */
 ConnectCommand::~ConnectCommand() {}

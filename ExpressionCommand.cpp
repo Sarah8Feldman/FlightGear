@@ -3,14 +3,23 @@
 //
 
 #include "ExpressionCommand.h"
-
+/**
+ * this command simplify an expression
+ * @param str string that is the expression
+ * @return the expression final value
+ */
 double ExpressionCommand::interpertExpression(string str){
     Interpreter interpreter;
     auto it = myTable->nameToPath.begin();
     int i = 0;
+    //set all of the variables from simulator so that the interpreter can use them as variables
     for (it; it != myTable->nameToPath.end(); it++){
         interpreter.setVariables(it->first + "=" + myTable->pathsToValue[it->second]);
     }
+    //calculate the expression
     return interpreter.interpret(str)->calculate();
 }
+/**
+ * destructor
+ */
 ExpressionCommand::~ExpressionCommand() {}

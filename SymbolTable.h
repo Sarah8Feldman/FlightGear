@@ -10,7 +10,7 @@
 #include "deque"
 #include "thread"
 
-
+//THIS CLASS IS GLOBAL
 
 class SymbolTable {
 private:
@@ -18,13 +18,12 @@ private:
     pthread_mutex_t * mutex;
     int socket;
 public:
-    thread clientTread;
-    thread serverThread;
+
     SymbolTable();
-    queue<string> sendToServerQueue;
-    unordered_map<string,string> nameToPath;
-    unordered_map<string, string> varesWithoutPath;
-//    unordered_map<string, Var> pathToVar;
+    queue<string> sendToServerQueue; //queue of values to update the simulator
+    unordered_map<string,string> nameToPath; // map name->path in simulator
+    unordered_map<string, string> varesWithoutPath; //map of variables that aren't in the simulator & values
+    //map of path in simulator->values
     unordered_map<string, double> pathsToValue = { {"/instrumentation/airspeed-indicator/indicated-speed-kt", 0)},
                                       {"/sim/time/warp", 0},
                                       {"/controls/switches/magnetos", 0},
@@ -65,23 +64,15 @@ public:
 
     };
     void updateNameToPath(string name, string path);
-
-    void setSocket(int mysocket);
-
     void updatePathValue(vector<string> values);
-
-    void setValuetoServer(string name, double value);
-
-    void setValueToNameToPath(string name, string path);
-
     Void updateVaresWithoutPath(string name, string val);
-
-    bool isVarSetsServer(string val);
     virtual ~SymbolTable();
 
-
+    //2 of our secondary threas
+    thread clientTread;
+    thread serverThread;
 };
-
+//declare the symboltable to be global
 extern SymbolTable* myTable;
 SymbolTable* myTable = new SymbolTable();
 

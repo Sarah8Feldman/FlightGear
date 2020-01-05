@@ -1,3 +1,4 @@
+
 //
 // Created by adi on 24/12/2019.
 //
@@ -27,13 +28,11 @@ private:
     vector<string> vecParser;
     int index;
     map<string, Command*> commandMap;
-//    Command* getCommandFromString(string str);
 
 public:
     commandMap mp;
     Parser(vector<string> vecParser, int index);
-//    int execute();
-    bool parser();
+    void parser();
     virtual ~Parser();
 };
 

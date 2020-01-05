@@ -6,26 +6,48 @@
 #include <iostream>
 #include <fstream>
 #include "lexer.h"
-
+/**
+ * prints thre vector
+ * @param vect vector
+ */
 void Lexer::print(vector<string> vect) {
     auto it = vect.begin();
     for (it; it != vect.end(); it++)
         std::cout << *it << ',';
 }
-
+/**
+ *
+ * @param op operator
+ * @return true is char is an operator
+ */
 bool Lexer::isOperator(char op) {
     return (op == '=') || (op == '+') || (op == '-') || (op == '*') ||
            (op == '/') || (op == '%') || (op == '(') || (op == ')') ||
            (op == ',') || (op == '{') || (op == '}');
     }
-
+/**
+ * checks if the 2 chars are an iperator that onclude = : such as => or ==
+ * @param op1 char 1
+ * @param op2 char 2
+ * @return true if is an operator of this kind
+ */
 bool Lexer::isEqualOp(char op1, char op2) {
     return (((op2 == '=') && (op1 == '=')) || (op1 == '!') || (op1 == '<') || (op1 == '>'));
 }
+/**
+ * arrows : <- or ->
+ * @param op1 char 1
+ * @param op2 char 2
+ * @return true if is an arrow
+ */
 bool Lexer::isArrow(char op1, char op2){
     return (((op1) == '-' && (op2 == '>')) || (op1 == '<') && (op2 == '-'));
 }
-
+/**
+ * delets all white spases from a string
+ * @param str string
+ * @return string whithout spaces
+ */
 string Lexer::expressionWithOutSpaces(std::__cxx11::string str) {
     int i = 0;
     string stringWithOutSpace = "";
@@ -36,17 +58,20 @@ string Lexer::expressionWithOutSpaces(std::__cxx11::string str) {
         i++;
     }
 }
-//inserts a parser in the right spaces
+/**
+ * inserts a parser(white space) where is needed
+ * @param str string
+ * @return string with spaces between 2 tokens
+ */
 string Lexer::insertParser (string str) {
-    //push white space between spesific characters before we split to vector
+    //push white space between spesific characters before we split to a vector
     bool isQuotation = false;
     string stringWithOutSpace = "";
     string retStr = "";
     string mathExp = "";
     int counter = 0;
-    int i =0;
+    int i = 0;
 
-    i=0;
     while(i < str.size()) {
         if (stringWithOutSpace[i] == '\"') {
             //first Quotation mark -> true
@@ -62,8 +87,10 @@ string Lexer::insertParser (string str) {
             retStr += str[i + 1];
             i+=2;
         }
+        //after an '=' we are expected to get an expression
         if(str[i] == '='){
             i++;
+            //in ex1 we handle an expression without spaces - so we delete them
             stringWithOutSpace = expressionWithOutSpaces(str);
             while (i < str.size()){
                 mathExp += stringWithOutSpace[i];
@@ -80,8 +107,11 @@ string Lexer::insertParser (string str) {
         if (isQuotation && isOperator(str[i])) {
             retStr += "\"" + parser + str[i] + parser + "\"";
         }
+        //inbetween brakets :
+        //1.an expression
+        //2.tokens devided by ','
+        //we count the right and left brackets
         if (str[i] == '('){
-//            stringWithOutSpace = expressionWithOutSpaces(str);
             while (str[i] != ','){
                 if(str[i] == ' '){
                     i++;
@@ -119,7 +149,12 @@ string Lexer::insertParser (string str) {
 
     return retStr;
 }
-//create a vector from single string
+
+/**
+ * create a vector from single string
+ * @param str string
+ * @return vector from a single string
+ */
 vector<string> Lexer::splitStringToVector(string str) {
     vector<string> vectorWithSpaces;
     vector<string>::iterator it;
@@ -156,7 +191,12 @@ vector<string> Lexer::splitStringToVector(string str) {
     }
     return FinalVector;
 }
-//create vector from a line
+
+/**
+ * create vector from a line
+ * @param str string
+ * @return vector
+ */
 vector<string> Lexer:: createVectorFromLine(string str) {
     string  strWithParser = insertParser(str);
     vector<string> finalVector = splitStringToVector(strWithParser);
@@ -164,11 +204,17 @@ vector<string> Lexer:: createVectorFromLine(string str) {
     return finalVector;
 }
 
-
+/**
+ * read a file - such as fly.txt
+ * create a vector from this file
+ * @param fileName
+ * @return
+ */
 vector<string> Lexer::createVectorFromFile(string fileName) {
     vector<string> tmpVec;
     vector<string>::iterator it;
     vector<string> finalVec;
+    //read from the file
     ifstream in_file;
     in_file.open(fileName, ios::in);
     if (!in_file) {
@@ -186,6 +232,9 @@ vector<string> Lexer::createVectorFromFile(string fileName) {
     in_file.close(); //close the file object
     return finalVec;
 }
+/**
+ * destructor
+ */
 Lexer::~Lexer(){}
 
 
