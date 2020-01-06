@@ -23,7 +23,7 @@
 #include <iterator>
 #include <list>
 
-class Parser : public Command {
+class Parser {
 private:
     vector<string> vecParser;
     int index;
@@ -31,9 +31,11 @@ private:
 
 public:
     commandMap mp;
-    Parser(vector<string> vecParser, int index);
-    void parser();
+//    Parser(vector<string> vecParser, int index);
+    void parse();
     virtual ~Parser();
+
+    void addVaribles(vector<string> vecParser, int index);
 };
 
 

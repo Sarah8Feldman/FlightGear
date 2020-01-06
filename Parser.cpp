@@ -7,14 +7,15 @@
 #include <iostream>
 
 using namespace std;
+
 /**
- * constructor
+ * add variables of the parser
  * @param vecParser  vector
  * @param index index in vector
  */
-Parser::Parser(vector<string> vecParser, int index) {
-    this->vecParser = vecParser;
-    this->index = index;
+void Parser::addVaribles(vector<string> vecParser, int index){
+this->vecParser = vecParser;
+this->index = index;
 }
 
 /**
@@ -22,7 +23,7 @@ Parser::Parser(vector<string> vecParser, int index) {
  * 1. check if index is in command map
  * 2.create the command and execute
  */
-void Parser::parser() {
+void Parser::parse() {
     this->index = 0;
     string currentCommand;
     //execute only if it is a command.
