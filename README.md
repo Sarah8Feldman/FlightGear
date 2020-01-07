@@ -29,9 +29,9 @@ using the Command Object string and call its execute.
     
 ## Set FlightGear Simulator
 
-1. Open FlightGear Simulator.
-2. Click Settings
-3. Scroll down to Additional Settings
+1. Open The FlightGear Simulator.
+2. Click On Settings.
+3. Go To Additional Settings.
 4. type the following commands:
 
     --telnet=socket,in,10,127.0.0.1,5402,tcp=8080
