@@ -95,5 +95,5 @@ The Expression class simplify an expression.
     Submit name : Sarah8Feldman
     
     
-    BIU University, Israel.
+  BIU University, Israel.
 
