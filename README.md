@@ -19,7 +19,7 @@ Given a string, we can immediately pull out the command that needs to be execute
 There is a class called Parser that aims to go through all the strings in the array and pull out 
 using the Command Object string and call its execute.
 
-## Elements:
+## Elements
 
     Design Patters
     Client-Server architecture
