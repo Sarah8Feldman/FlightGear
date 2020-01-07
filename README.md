@@ -95,6 +95,7 @@ using the Command Object string and call its execute.
 The SymbolTable class contains map that updates from the server.
 The class have mutex that used for controlling the threads access to the symbol table.
 
+
 ## Authors
 
 * Adi Ziv
