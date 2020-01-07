@@ -34,9 +34,9 @@ using the Command Object string and call its execute.
 3. Go To Additional Settings.
 4. type the following commands:
 
-    --telnet=socket,in,10,127.0.0.1,5402,tcp=8080
+    *--telnet=socket,in,10,127.0.0.1,5402,tcp=8080
     
-    --generic=socket,out,10,127.0.0.1,5400,tcp,generic_small
+    *--generic=socket,out,10,127.0.0.1,5400,tcp,generic_small
 
 ## Command Classes
 ### Command
@@ -86,8 +86,8 @@ The Expression class simplify an expression.
 
 ## Authors
 
-Adi Ziv
+*Adi Ziv
 
-Sarit Feldman
+*Sarit Feldman
 
 
