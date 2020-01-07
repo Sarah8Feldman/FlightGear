@@ -87,9 +87,12 @@ The Expression class simplify an expression.
 ## Authors
 
 * Adi Ziv
-    Adi10z
+
+    Submit name : Adi10z
 
 * Sarit Feldman
-    Sarah8Feldman
 
+    Submit name : Sarah8Feldman
+    
+BIU University, Israel.
 
