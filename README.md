@@ -90,8 +90,7 @@ The Expression class simplify an expression.
 The Lexer class that aims to read a file that contains code, and returns the code to a string of strings.
 ### ~ Parser
 
-The Parser class that aims to go through all the strings in the array and pull out 
-using the Command Object string and call its execute.
+The Parser class that aims to go through all the strings in the array and pull out using the Command Object string and call its execute.
 ### ~ SymbolTable
 
 The SymbolTable class contains map that updates from the server.
