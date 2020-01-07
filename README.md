@@ -39,7 +39,7 @@ using the Command Object string and call its execute.
     * --generic=socket,out,10,127.0.0.1,5400,tcp,generic_small
 
 ## Command Classes
-### Command
+### * Command
 
 The Command class is a interface class that contain execute function that we will run for all the command class.
 ### ConnectCommand
