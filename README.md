@@ -86,8 +86,8 @@ The Expression class simplify an expression.
 
 ## Authors
 
-star1 Adi Ziv
+Adi Ziv
 
-star1 Sarit Feldman
+Sarit Feldman
 
 
