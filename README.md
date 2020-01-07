@@ -50,9 +50,6 @@ We act as a client who sends requests to the simulator.
 
 The OpenServerCommand class gets data from the server about flight variables and updates them to our map.
 The simulator connects to the server as client and sends requests.
-### ~ Lexer
-
-The Lexer class that aims to read a file that contains code, and returns the code to a string of strings.
 ### ~ Map
 
 The Map class have map that contains string and command*.
@@ -83,6 +80,20 @@ To execute: if the condition is valid execute all of the commands inside the sco
 ### ~ Expression
 
 The Expression class simplify an expression.
+
+## Architecture Classes
+
+### ~ Lexer
+
+The Lexer class that aims to read a file that contains code, and returns the code to a string of strings.
+### ~ Parser
+
+The Parser class that aims to go through all the strings in the array and pull out 
+using the Command Object string and call its execute.
+### ~ SymbolTable
+
+The SymbolTable class contains map that updates from the server.
+The class have mutex that used for controlling the threads access to the symbol table.
 
 ## Authors
 
