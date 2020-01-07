@@ -38,4 +38,56 @@ using the Command Object string and call its execute.
     
     --generic=socket,out,10,127.0.0.1,5400,tcp,generic_small
 
+## Command Classes
+### Command
+
+The Command class is a interface class that contain execute function that we will run for all the command class.
+### ConnectCommand
+
+The ConnectCommand class is a command in which we send and update values to the simulator.
+We act as a client who sends requests to the simulator.
+### OpenServerCommand
+
+The OpenServerCommand class gets data from the server about flight variables and updates them to our map.
+The simulator connects to the server as client and sends requests.
+### Lexer
+
+The Lexer class that aims to read a file that contains code, and returns the code to a string of strings.
+### Map
+
+The Map class have map that contains string and command*.
+### DefineVar
+
+The DefineVar class creates variables with path to simulator and value.
+To execute we have number of cases:
+ * 1. new vae definition - create a variable whith a path so simulation.
+ * 2. create a var whithout a path to simulation.
+ * 3. update a variable's value.
+### Sleep
+
+The Sleep class sends thread to sleep for a spesific time(amount of time in milliseconds).
+### Print
+
+The Print class prints a value that it excepts.
+To execute we have 2 cases:
+ * 1. print a string in between "".
+ * 2. print a value of a variable(can be an expression).
+### If
+
+The If class represent a If loop.
+To execute: if the condition is valid execute all of the commands inside the scope.
+### While
+
+The While class represent a while loop.
+To execute: if the condition is valid execute all of the commands inside the scope.
+### Expression
+
+The Expression class simplify an expression.
+
+## Authors
+
+star1 Adi Ziv
+
+star1 Sarit Feldman
+
 
