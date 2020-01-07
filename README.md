@@ -33,6 +33,7 @@ using the Command Object string and call its execute.
 2. Click Settings
 3. Scroll down to Additional Settings
 4. type the following commands:
+
     --telnet=socket,in,10,127.0.0.1,5402,tcp=8080
     --generic=socket,out,10,127.0.0.1,5400,tcp,generic_small
 
