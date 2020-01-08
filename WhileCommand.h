@@ -6,22 +6,21 @@
 #define LEXER_WHILECOMMAND_H
 #include "Command.h"
 #include "ex1.h"
-#include "commandMap.h"
-#include "unordered_map"
+#include <unordered_map>
 #include "ExpressionCommand.h"
-extern SymbolTable* myTable;
 
-class WhileCommand : Command {
+class WhileCommand : public Command {
 private:
     vector<string> vect;
     int index;
 
 public:
-    WhileCommand(vector<string> vect, int index);
-    virtual int execute();
+    WhileCommand(vector<string> vect);
+    int execute(int index);
     virtual ~WhileCommand();
     bool checkCondition();
 
+    bool checkCondition(int index);
 };
 
 #endif //LEXER_WHILECOMMAND_H

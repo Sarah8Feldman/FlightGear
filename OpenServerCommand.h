@@ -7,22 +7,27 @@
 
 #include "Command.h"
 #include "SymbolTable.h"
-extern SymbolTable* myTable;
 
 class OpenServerCommand : public Command {
 private:
     vector<string> vecOpenServer;
-    int index;
-    string iP;
-    string sim;
+    string port;
+    mutex myMutex;
 
 public:
-    OpenServerCommand(vector<string> vecOpenServer, int index);
-    int execute();
+    OpenServerCommand(vector<string> vecOpenServer);
+    int execute(int index);
     virtual ~OpenServerCommand();
     void runThread();
     string bufferToString(char *buff);
-    vector<string> stringToVector(string str);
+    vector<double> stringToVector(string str);
+    bool regexMatches(string str);
+    vector<string> regexer(string str, string pattern);
+    void updateMap(vector<double> values);
+
+    void runThread(int client_socket);
+
+    vector<double> stringToDoubleVector(string str);
 };
 
 

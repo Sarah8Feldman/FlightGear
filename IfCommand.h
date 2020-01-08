@@ -4,21 +4,19 @@
 
 #ifndef LEXER_IFCOMMAND_H
 #define LEXER_IFCOMMAND_H
-#include "Command.h"
 #include "ex1.h"
-#include "commandMap.h"
 #include "unordered_map"
 #include "ExpressionCommand.h"
-extern SymbolTable* myTable;
+#include "Command.h"
 
-class IfCommand:Command {
+class IfCommand: public Command {
 private:
     vector<string> vect;
     int index;
 
 public:
-    IfCommand(vector<string> vect, int index);
-     virtual int execute();
+    IfCommand(vector<string> vect);
+    int execute(int index);
     virtual ~IfCommand();
     bool checkCondition();
 };

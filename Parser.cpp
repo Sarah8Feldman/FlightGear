@@ -1,9 +1,9 @@
-
 //
 // Created by adi on 24/12/2019.
 //
 
 #include "Parser.h"
+#include "DefineVarCommand.h"
 #include <iostream>
 
 using namespace std;
@@ -14,8 +14,8 @@ using namespace std;
  * @param index index in vector
  */
 void Parser::addVaribles(vector<string> vecParser, int index){
-this->vecParser = vecParser;
-this->index = index;
+    this->vecParser = vecParser;
+    this->index = index;
 }
 
 /**
@@ -29,12 +29,15 @@ void Parser::parse() {
     //execute only if it is a command.
     while (index < this->vecParser.size()) {
         currentCommand = this->vecParser[index];
+//        cout << "currentCommand is " << currentCommand << endl;
         //It is not a command. continue to next iteration.
-        if (this->commandMap.find(currentCommand) == commandMap.end()) {
-            index =  DefineVarCommand(vecParser, index).execute();
+        if (myTable->allCommandsMap.find(currentCommand) == myTable->allCommandsMap.end()) {
+//            cout << "currentCommand is " << currentCommand << endl;
+            index =  DefineVarCommand(vecParser).execute(index);
+        } else {
+            //It's a command. index moved as many as the command args.
+            Command *command = myTable->allCommandsMap.find(currentCommand)->second;
+            index = command->execute(index);
         }
-        //It's a command. index moved as many as the command args.
-        Command *command = this->commandMap.find(currentCommand)->second;
-        index = command->execute();
     }
 }

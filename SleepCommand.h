@@ -8,7 +8,6 @@
 #include "Command.h"
 #include <vector>
 #include "ExpressionCommand.h"
-extern SymbolTable* myTable;
 
 class SleepCommand : public Command {
 private:
@@ -18,8 +17,8 @@ private:
     int index;
 
 public:
-    SleepCommand(vector<string> vecSleep, int index);
-    int execute();
+    SleepCommand(vector<string> vecSleep);
+    int execute(int index);
     bool checkIfValid(vector<string> vecString);
     virtual ~SleepCommand();
 

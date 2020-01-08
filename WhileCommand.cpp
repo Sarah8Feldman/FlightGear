@@ -2,20 +2,21 @@
 // Created by sarah on 02/01/2020.
 //
 #include "WhileCommand.h"
+#include "SymbolTable.h"
+
 /**
  * This command inrerprates a while loop
  * @param vect1 vector
  * @param index1 index in vector
  */
-WhileCommand::WhileCommand(vector<string> vect1, int index1) {
+WhileCommand::WhileCommand(vector<string> vect1) {
     this->vect = vect1;
-    this->index = index1;
 }
 /**
  * checks if the condition is true
  * @return true if condition is valid
  */
-bool WhileCommand::checkCondition() {
+bool WhileCommand::checkCondition(int index) {
     //    if fly.txt
 //    while name < value
 //index 0    1  2  3
@@ -62,17 +63,17 @@ bool WhileCommand::checkCondition() {
  * if the condition is valid execute all of the commands inside the scope
  * @return the next command index
  */
-int WhileCommand::execute() {
+int WhileCommand::execute(int index) {
     int i = index + 5;
-    while (checkCondition()) {
+    while (checkCondition(index)) {
         unordered_map<string, Command*>::iterator it;
-        commandMap map;
-        unordered_map<string, Command*> vars = map.getCommandsMap();
+
+        auto vars = myTable->allCommandsMap;
         //while inside the scope
         while (vect[i] != "}") {
             it = vars.find(vect[i]);
             if (it != vars.end()){
-                vars.at(vect[i])->execute();
+                vars.at(vect[i])->execute(i);
             }
             i++;
         }

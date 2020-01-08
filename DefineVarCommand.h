@@ -11,17 +11,15 @@
 #include "ex1.h"
 #include <string>
 #include "ExpressionCommand.h"
-extern SymbolTable myTable;
+#include "commandMap.h"
 
-class DefineVarCommand:Command{
+class DefineVarCommand: public Command{
 private:
-    vector<string> vec;
-    int index;
-    ExpressionCommand expressionC;
+    vector<string> vecDefine;
 
 public:
-    DefineVarCommand(vector<string> vect, int index);
-    int execute();
+    DefineVarCommand(vector<string> vecDefine);
+    int execute(int index);
     virtual ~DefineVarCommand();
 
 };

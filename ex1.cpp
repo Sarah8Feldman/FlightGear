@@ -1,3 +1,4 @@
+
 #include <stack>
 #include <sstream>
 #include <queue>
@@ -244,7 +245,7 @@ void Interpreter::setVariables(const string& variables) {
             string varName = token.substr(0, eqIndex);
             string varValue = token.substr(eqIndex+1);
             if (isValidVarName(varName) && isNumber(varValue)){
-//				cout<<"print variable "<<varName<<eq<<varValue<<endl;
+//                cout<<"print variable "<<varName<<eq<<varValue<<endl;
                 varMap[varName]=stod(varValue);
             }
             else{
@@ -268,12 +269,6 @@ bool Interpreter::isBinOperation (const char c){
     }
     return false;
 }
-bool Interpreter::isOperation (const char c){
-    if (c ==  '+' || c == '-' || c == '*' || c == '/' || c == '=' || c == '<=' || c == '>=' || c == '>' || c =='<'){
-        return true;
-    }
-    return false;
-}
 
 bool Interpreter::isBrakets (const char c){
     if (c ==  '(' || c == ')'){
@@ -289,151 +284,162 @@ Expression* Interpreter::interpret(const string inputExpr) {
     stringstream strstream;
     stack<char> operStack;
     queue<string> postfixQ;
+    bool isDigit = true;
+    Expression* e;
 
     string result = "";
     string varValue = "";
     string sign = "";
     bool probableUnarOper = false;
-
+    int c = varMap.count(inputExpr);
+    double v = varMap[inputExpr];
+    auto it = varMap.find(inputExpr);
+    if (it != varMap.end()){
+        e = new Value(varMap.at(inputExpr));
+    } else {
+//    if(varMap.count(inputExpr) > 0 ){
+//        e = new Value(varMap.at(inputExpr));
+//    }
+    for (unsigned int j = 0; j < inputExpr.size(); j++) {
+        char cc = inputExpr[j];
+        if (!isdigit(cc)) {
+            isDigit = false;
+        }
+    }
+    if(isDigit){
+        e = new Value(stod(inputExpr));
+    } else if (varMap.count(inputExpr) == 0 ) {
 //    cout << "<<<>>> Expression: " << inputExpr << endl;
-    for (unsigned int i = 0; i < inputExpr.size(); i++) {
-        char cc = inputExpr[i];
-        char nc = inputExpr[i + 1];
-        if ((isalpha(cc) || cc == underscore)) {
-//    		cout<<"Variable char: "<<cc<<endl;
-            result = result + cc;
-            probableUnarOper = false;
-            if (isBinOperation(nc) || nc == rightBr) {
-                // variable name. replace it by value if exists, else throw exception
-                if (varMap.count(result) > 0) {
+        for (unsigned int i = 0; i < inputExpr.size(); i++) {
+            char cc = inputExpr[i];
+            char nc = inputExpr[i + 1];
+            if ((isalpha(cc) || cc == underscore)) {
+//            cout<<"Variable char: "<<cc<<endl;
+                result = result + cc;
+                probableUnarOper = false;
+                if (isBinOperation(nc) || nc == rightBr) {
+                    // variable name. replace it by value if exists, else throw exception
+                    if (varMap.count(result) > 0) {
 //                    varValue = to_string(varMap.find(result)->second);
-                    varValue = to_string(varMap.find(result)->second);
-                    postfixQ.push(varValue);
-                    result = "";
-                } else {
-//                    cout << "variable without value: " << result << endl;
-                    result = "";
-                    throw "illegal math expression";
-                }
-            }
-//    		cout<<"Variable value: "<<varValue<<endl;
-            varValue = "";
-        } else if ((isdigit(cc) || cc == dot)) {
-//    		cout<<"Digit: "<<cc<<endl;
-            result = result + cc;
-            probableUnarOper = false;
-            if (isBinOperation(nc) || nc == rightBr) {
-                // could be double or variable
-                if (!isNumber(result)) {
-                    // variable name with number. replace it by value if exists, else throw exception
-                    if (varMap.count(result)) {
                         varValue = to_string(varMap.find(result)->second);
                         postfixQ.push(varValue);
+                        result = "";
                     } else {
+//                    cout << "variable without value: " << result << endl;
                         result = "";
                         throw "illegal math expression";
                     }
+                }
+//            cout<<"Variable value: "<<varValue<<endl;
+                varValue = "";
+            } else if ((isdigit(cc) || cc == dot)) {
+//            cout<<"Digit: "<<cc<<endl;
+                result = result + cc;
+                probableUnarOper = false;
+                if (isBinOperation(nc) || nc == rightBr) {
+                    // could be double or variable
+                    if (!isNumber(result)) {
+                        // variable name with number. replace it by value if exists, else throw exception
+                        if (varMap.count(result)) {
+                            varValue = to_string(varMap.find(result)->second);
+                            postfixQ.push(varValue);
+                        } else {
+                            result = "";
+                            throw "illegal math expression";
+                        }
+                    } else {
+                        postfixQ.push(result.insert(0, sign));
+                    }
+                    result = "";
+                    sign = "";
+                }
+//            cout<<"Number: "<<varValue<<endl;
+                varValue = "";
+            } else if (isBinOperation(cc)) {
+                if (isBinOperation(nc)) {
+                    throw "illegal math expression";
+                }
+                if (cc == operMinus && isdigit(nc)) {
+                    sign = "-";
                 } else {
-                    postfixQ.push(result.insert(0,sign));
+                    if ((cc == operMinus && nc == leftBr && probableUnarOper) ||
+                        (cc == operMinus && nc == leftBr && operStack.empty() && postfixQ.empty())) {
+                        cc = unarMinus;
+                    }
+                    if ((cc == operPlus && nc == leftBr && probableUnarOper) ||
+                        (cc == operPlus && nc == leftBr && operStack.empty() && postfixQ.empty())) {
+                        cc = unarPlus;
+                    }
+                    if (!operStack.empty()) {
+                        char topOper = operStack.top();
+                        int currOperPrior = operMap.find(cc)->second;
+                        int topOperPrior = operMap.find(topOper)->second;
+                        if (topOperPrior >= currOperPrior) {
+                            operStack.pop();
+                            string s;
+                            s.push_back(topOper);
+                            postfixQ.push(s);
+                        }
+                    }
+                    operStack.push(cc);
+                    probableUnarOper = false;
                 }
-                result = "";
-                sign="";
-            }
-//    		cout<<"Number: "<<varValue<<endl;
-            varValue = "";
-        } else if (isBinOperation(cc)) {
-            if (isBinOperation(nc)){
-                throw "illegal math expression";
-            }
-            if (cc == operMinus && isdigit(nc)){
-                sign="-";
-            } else {
-                if ((cc == operMinus && nc == leftBr && probableUnarOper) ||
-                    (cc == operMinus && nc == leftBr && operStack.empty() && postfixQ.empty())) {
-                    cc = unarMinus;
+//            cout<<"Operation: "<<cc<<endl;
+            } else if (cc == leftBr) {
+                if (nc == '-' || nc == '+') {
+                    probableUnarOper = true;
                 }
-                if ((cc == operPlus && nc == leftBr && probableUnarOper) ||
-                    (cc == operPlus && nc == leftBr && operStack.empty() && postfixQ.empty())) {
-                    cc = unarPlus;
-                }
+                operStack.push(cc);
+//            cout<<"Left P: "<<cc<<endl;
+            } else if (cc == rightBr) {
+                probableUnarOper = false;
                 if (!operStack.empty()) {
                     char topOper = operStack.top();
-                    int currOperPrior = operMap.find(cc)->second;
-                    int topOperPrior = operMap.find(topOper)->second;
-                    if (topOperPrior >= currOperPrior) {
+                    while (topOper != leftBr) {
                         operStack.pop();
                         string s;
                         s.push_back(topOper);
                         postfixQ.push(s);
+                        if (!operStack.empty()) {
+                            topOper = operStack.top();
+                        } else {
+                            throw "incorrect bracket number";
+                        }
                     }
                 }
-                operStack.push(cc);
-                probableUnarOper = false;
+                operStack.pop();
+//            cout<<"Right P: "<<cc<<endl;
             }
-//    		cout<<"Operation: "<<cc<<endl;
-        } else if (cc == leftBr) {
-            if (nc == '-' || nc == '+'){
-                probableUnarOper=true;
-            }
-        } else if (isOperation(cc)) {
-            if (nc == '-' || nc == '+'){
-                probableUnarOper=true;
-            }
-        } else if (isBinOperation(cc) ) {
-            if (nc == '-' || nc == '+'){
-                probableUnarOper=true;
-            }
-
-            operStack.push(cc);
-//    		cout<<"Left P: "<<cc<<endl;
-        } else if (cc == rightBr) {
-            probableUnarOper = false;
-            if (!operStack.empty()) {
-                char topOper = operStack.top();
-                while (topOper != leftBr) {
-                    operStack.pop();
-                    string s;
-                    s.push_back(topOper);
-                    postfixQ.push(s);
-                    if (!operStack.empty()) {
-                        topOper = operStack.top();
-                    } else {
-                        throw "incorrect bracket number";
-                    }
-                }
-            }
-            operStack.pop();
-//    		cout<<"Right P: "<<cc<<endl;
         }
-    }
 
-    while (!operStack.empty()) {
-        char topOper = operStack.top();
-        string s;
-        s.push_back(topOper);
-        postfixQ.push(s);
-        operStack.pop();
-    }
+        while (!operStack.empty()) {
+            char topOper = operStack.top();
+            string s;
+            s.push_back(topOper);
+            postfixQ.push(s);
+            operStack.pop();
+        }
 //    printQueue(postfixQ, "postfix queue");
 //    printStack(operStack, "operations stack");
 
-    Expression* e = evalPostfix(postfixQ);
-
+        e = evalPostfix(postfixQ);
+    }
+    }
     return e;
 }
 
 
-    Expression* Interpreter::createExpressionValue(Expression* op1, Expression* op2, char operate){
-        switch (operate) {
-            case '*': return new Mul(op1,op2);
-            case '/': return new Div(op1, op2);
-            case '+': return new Plus(op1,op2);
-            case '-': return new Minus(op1,op2);
-            case '!': return new UPlus(op2);
-            case '~': return new UMinus(op2);
-            default : return 0;
-        }
+Expression* Interpreter::createExpressionValue(Expression* op1, Expression* op2, char operate){
+    switch (operate) {
+        case '*': return new Mul(op1,op2);
+        case '/': return new Div(op1, op2);
+        case '+': return new Plus(op1,op2);
+        case '-': return new Minus(op1,op2);
+        case '!': return new UPlus(op2);
+        case '~': return new UMinus(op2);
+        default : return 0;
     }
+}
 
 
 

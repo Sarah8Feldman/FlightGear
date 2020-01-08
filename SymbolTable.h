@@ -6,25 +6,29 @@
 #define LEXER_SYMBOLTABLE_H
 
 #include <unordered_map>
-#include "DefineVarCommand.h"
 #include "deque"
 #include "thread"
+#include <vector>
+#include <queue>
+#include <mutex>
+#include "Command.h"
+using namespace std;
+
 
 //THIS CLASS IS GLOBAL
 
 class SymbolTable {
 private:
-    Vector<string> values;
-    pthread_mutex_t * mutex;
+    vector<string> values;
+    mutex pthread_mutex_t;
     int socket;
 public:
 
-    SymbolTable();
     queue<string> sendToServerQueue; //queue of values to update the simulator
     unordered_map<string,string> nameToPath; // map name->path in simulator
     unordered_map<string, string> varesWithoutPath; //map of variables that aren't in the simulator & values
     //map of path in simulator->values
-    unordered_map<string, double> pathsToValue = { {"/instrumentation/airspeed-indicator/indicated-speed-kt", 0)},
+    unordered_map<string, double> pathsToValue = {{"/instrumentation/airspeed-indicator/indicated-speed-kt", 0},
                                       {"/sim/time/warp", 0},
                                       {"/controls/switches/magnetos", 0},
                                       {"/instrumentation/heading-indicator/offset-deg", 0},
@@ -43,7 +47,7 @@ public:
                                       {"/instrumentation/magnetic-compass/indicated-heading-deg", 0},
                                       {"/instrumentation/slip-skid-ball/indicated-slip-skid", 0},
                                       {"/instrumentation/turn-indicator/indicated-turn-rate", 0},
-                                      {"instrumentation/vertical-speed-indicator/indicated-speed-fpm", 0},
+                                      {"/instrumentation/vertical-speed-indicator/indicated-speed-fpm", 0},
                                       {"/controls/flight/aileron", 0},
                                       {"/controls/flight/elevator", 0},
                                       {"/controls/flight/rudder", 0},
@@ -63,17 +67,21 @@ public:
 
 
     };
+    unordered_map<string, Command*> allCommandsMap;
     void updateNameToPath(string name, string path);
-    void updatePathValue(vector<string> values);
-    Void updateVaresWithoutPath(string name, string val);
+//    unordered_map<string, Command*> getCommandMap();
+    void updatePathValue(vector<double > values);
+    void updateVaresWithoutPath(string name, string val);
     virtual ~SymbolTable();
 
     //2 of our secondary threas
     thread clientTread;
     thread serverThread;
+
+    bool serverIsUp = true;
 };
 //declare the symboltable to be global
 extern SymbolTable* myTable;
-SymbolTable* myTable = new SymbolTable();
+
 
 #endif //LEXER_SYMBOLTABLE_H

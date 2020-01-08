@@ -11,7 +11,6 @@
 #include "ex1.h"
 #include <vector>
 #include "ExpressionCommand.h"
-extern SymbolTable* myTable;
 
 class PrintCommand : public Command {
 private:
@@ -20,9 +19,9 @@ private:
     vector<string> vecPrint;
     int index;
 public:
-    PrintCommand(vector<string> vecPrint, int index);
+    PrintCommand(vector<string> vecPrint);
 //    void to_string(string &value);
-    int execute();
+    int execute(int index);
     virtual ~PrintCommand();
 };
 

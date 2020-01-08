@@ -9,7 +9,7 @@
  * @param vecPrint vector
  * @param index index in vector
  */
-PrintCommand::PrintCommand(vector<string> vecPrint, int index) {
+PrintCommand::PrintCommand(vector<string> vecPrint) {
     this->vecPrint = vecPrint;
     this->index = index;
 }
@@ -19,7 +19,7 @@ PrintCommand::PrintCommand(vector<string> vecPrint, int index) {
  * 2. print a value of a variable(can be an expression)
  * @return the next command index
  */
-int PrintCommand::execute() {
+int PrintCommand::execute(int index) {
     string str = this->vecPrint.at(index + 1); //value to print
     //if string then print it without the quotes.
     //34 is "" in ascii

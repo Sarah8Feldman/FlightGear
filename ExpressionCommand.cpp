@@ -3,6 +3,8 @@
 //
 
 #include "ExpressionCommand.h"
+#include "SymbolTable.h"
+
 /**
  * this command simplify an expression
  * @param str string that is the expression
@@ -14,7 +16,9 @@ double ExpressionCommand::interpertExpression(string str){
     int i = 0;
     //set all of the variables from simulator so that the interpreter can use them as variables
     for (it; it != myTable->nameToPath.end(); it++){
-        interpreter.setVariables(it->first + "=" + myTable->pathsToValue[it->second]);
+        string command = it->first + "=" + to_string(myTable->pathsToValue.at(it->second)) + ";";
+        interpreter.setVariables(command);
+
     }
     //calculate the expression
     return interpreter.interpret(str)->calculate();

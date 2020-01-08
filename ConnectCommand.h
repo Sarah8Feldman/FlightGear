@@ -7,22 +7,24 @@
 
 #include "Command.h"
 #include "ExpressionCommand.h"
-#include "Parser.h"
-extern SymbolTable* myTable;
+//#include "Parser.h"
 
 class ConnectCommand : public Command {
 private:
     vector<string> vecConnect;
     int index;
     string iP;
+    string port;
     string sim;
 
 public:
-    ConnectCommand(vector<string> vecConnect, int index);
-    int execute();
+    ConnectCommand(vector<string> vecConnect);
+    int execute(int index);
     virtual ~ConnectCommand();
 
-    Void runThread();
+    void runThread();
+
+    void runThread(int clientSocket);
 };
 
 

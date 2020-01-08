@@ -6,24 +6,17 @@
 #define LEXER_COMMANDMAP_H
 
 #include <unordered_map>
+#include <string>
+#include <vector>
 #include "Command.h"
-#include "IfCommand.h"
-#include "WhileCommand.h"
-#include "SymbolTable.h"
-extern SymbolTable* myTable;
+
+using namespace std;
 
 class commandMap {
 private:
     vector<string> vect;
     int index;
-    unordered_map<string, Command*> varMap = {{"openDataServer", OpenServerCommand(vect, index)},
-                                             {"connect",         ConnectCommand(vect, index)},
-                                             {"var",             DefineVarCommand(vect, index)},
-                                             {"if",              IfCommand(vect, index)},
-                                             {"while",           WhileCommand(vect, index)},
-                                             {"sleep",           SleepCommand(vect, index)},
-                                             {"print",           PrintCommand(vect, index)}
-    };
+    unordered_map<string, Command*> varMap;
 public:
     unordered_map<string, Command*> getCommandsMap();
     virtual ~commandMap();

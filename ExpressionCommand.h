@@ -6,12 +6,11 @@
 #define LEXER_EXPRESSIONCOMMAND_H
 
 #include "ex1.h"
-#include "SymbolTable.h"
 #include "map"
 #include <string>
 #include <cstring>
+#include <mutex>
 
-extern SymbolTable* myTable;
 
 class ExpressionCommand {
 public:
