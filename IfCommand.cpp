@@ -6,19 +6,19 @@
 
 /**
  * This command inrerprates an if "loop"
- * @param vect1 vector
- * @param index1 index in vector
+ * @param vect1 vector from lexer
  */
 IfCommand::IfCommand(vector<string> vect1) {
     this->vect = vect1;
+    globalMaps = SymbolTable::getInstance();
 }
 /**
- * checks if the condition is true
+ * Checks if the condition is true
  * @return true if condition is valid
  */
 bool IfCommand::checkCondition() {
-//    if fly.txt
-//    if name < value
+//      in fly.txt:
+//      if name < value
 //index 0  1  2  3
     string left = vect[index + 1];
     string op = vect[index + 2];
@@ -60,8 +60,11 @@ bool IfCommand::checkCondition() {
     }
     return false;
 }
+
 /**
- * if the condition is valid execute all of the commands inside the scope
+ * The execute function.
+ * If the condition is valid execute all of the commands inside the scope.
+ * @param index of the command
  * @return the next command index
  */
 int IfCommand::execute(int index) {
@@ -69,16 +72,15 @@ int IfCommand::execute(int index) {
 //i = 0   1   2   3   4
     int i = index + 5;
     if (checkCondition()) {
-        unordered_map<string, Command*>::iterator it;
-        unordered_map<string, Command*> vars = myTable -> allCommandsMap;
         //while inside the scope
         while (vect[i] != "}") {
-            it = vars.find(vect[i]);
-            if (it != vars.end()){
-                vars.at(vect[i])->execute(i);
+            //find the command in the command map and execute it
+            auto it =  globalMaps -> allCommandsMap.find(vect[i]);
+            if (it != globalMaps -> allCommandsMap.end()){
+                i = globalMaps -> allCommandsMap.at(vect[i])->execute(i);
             }
-            i++;
-        }
+    }
+        i = index + 5;
     } return i;
 }
 /**

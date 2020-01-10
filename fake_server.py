@@ -40,7 +40,7 @@ DEFAULT_LISTEN_PORT = 5402 #client
 DEFAULT_TARGET_PORT = 5400 #server
 DEFAULT_SOCKET_BACKLOG = 5
 DEFAULT_SLEEP_INTERVAL = 0.5
-CLIENT_UPDATE_INTERVAL = 3 #controls how fast this client sends you values
+CLIENT_UPDATE_INTERVAL = 1 #controls how fast this client sends you values
 ALTITUDE_UPDATE_INTERVAL = 1.0
 
 gear_variables = []
@@ -181,7 +181,6 @@ def server(): #handles input from client
     while True:
         print("In server waiting for data")
         msg = server.recv()
-        print('msg from client: %s', msg)
         logging.debug('msg from client: %s', msg)
         handle_input(msg)
 

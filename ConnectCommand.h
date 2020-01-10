@@ -7,8 +7,13 @@
 
 #include "Command.h"
 #include "ExpressionCommand.h"
+#include "SymbolTable.h"
 //#include "Parser.h"
 
+/**
+ * ConnectCommand:
+ * Inherits from Command interface and implements it.
+ **/
 class ConnectCommand : public Command {
 private:
     vector<string> vecConnect;
@@ -18,8 +23,12 @@ private:
     string sim;
 
 public:
+    SymbolTable *globalMaps;
+
     ConnectCommand(vector<string> vecConnect);
+
     int execute(int index);
+
     virtual ~ConnectCommand();
 
     void runThread();

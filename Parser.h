@@ -8,24 +8,31 @@
 #include "Command.h"
 #include "Lexer.h"
 #include "Expression.h"
-#include "ex1.h"
-#include "commandMap.h"
+#include "ExpressionInterpreter.h"
+#include "SymbolTable.h"
 #include <string>
 #include <vector>
 #include <map>
 #include <iterator>
 #include <list>
 
+/**
+ * The Parser Class.
+ * this class is an interperter for flight commands
+ */
 class Parser {
 private:
     vector<string> vecParser;
+
     int index;
-//    map<string, Command*> commandMap;
 
 public:
-//    commandMap mp;
-//    Parser(vector<string> vecParser, int index);
+    Parser();
+
+    SymbolTable *globalMaps;
+
     void parse();
+
     void addVaribles(vector<string> vecParser, int index);
 };
 

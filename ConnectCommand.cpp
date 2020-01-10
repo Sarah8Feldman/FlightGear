@@ -13,37 +13,45 @@
 
 
 /**
- * ConnectCommand is a command in which we send and update values to the simulator
+ * ConnectCommand class is a command in which we send and update values to the simulator.
+ * We act as a client who sends requests to the simulator.
  * @param vecConnect vector from lexer
- * @param index in vector
+
  */
 ConnectCommand::ConnectCommand(vector<string> vecConnect) {
     this->vecConnect = vecConnect;
+    globalMaps = SymbolTable::getInstance();
+
 }
 
 /**
- * Runs the thread
+ * Runs the thread.
+ * @param clientSocket the socket we opend
+ * @return void function
  */
 void ConnectCommand::runThread(int clientSocket){
+        globalMaps->gMutex.lock();
+        while (!globalMaps->clientCommandsQueue.empty()) {
 
-        while (!myTable->sendToServerQueue.empty()) {
             //all names variable for updating the simulator are in a queue
-            string name = myTable->sendToServerQueue.front();
+            string name = globalMaps->clientCommandsQueue.front();
+
             //the values of the variables are in the maps
-            double value = myTable->pathsToValue[myTable->nameToPath[name]];
-//            cout << "got var " << name << " value " << value << endl;
-            //write to the server
-            char writeToServer[500] = "set ";
-            strcat(writeToServer, myTable->nameToPath.at(name).c_str());
-            strcat(writeToServer, " ");
-            strcat(writeToServer, to_string(value).c_str());
-            strcat(writeToServer, "\r\n");
-            int n = write(clientSocket, writeToServer, strlen(writeToServer));
+            double value = globalMaps->pathsToValueMap[globalMaps->nameToPathMap[name]];
+            //we send a set command to the simulator - "set this/is/the/path value"
+            char writeToClientBuffer[500] = "set ";
+            strcat(writeToClientBuffer, globalMaps->nameToPathMap.at(name).c_str());
+            strcat(writeToClientBuffer, " ");
+            strcat(writeToClientBuffer, to_string(value).c_str());
+            strcat(writeToClientBuffer, "\r\n");
+            //cout << ">>>Write to sim command " << writeToClientBuffer << endl;
+            int n = write(clientSocket, writeToClientBuffer, strlen(writeToClientBuffer));
             if (n < 0) {
                 throw "Error writing to socket";
             }
-            myTable->sendToServerQueue.pop();
+            globalMaps->clientCommandsQueue.pop();
         }
+        globalMaps->gMutex.unlock();
 
     close(clientSocket);
 }
@@ -51,7 +59,8 @@ void ConnectCommand::runThread(int clientSocket){
 
 
 /**
- *
+ * The execute function.
+ * @param index
  * @return the index of the next command
  */
 int ConnectCommand::execute(int index) {
@@ -83,7 +92,7 @@ int ConnectCommand::execute(int index) {
 //        is_connect = connect(clientSocket, (struct sockaddr *)&address, sizeof(address));
 //    }
 
-    this_thread::sleep_for(chrono::seconds(10));
+//    this_thread::sleep_for(chrono::seconds(10));
     thread threadCC([=]{ runThread(clientSocket);});
     threadCC.detach();
 
@@ -92,7 +101,7 @@ int ConnectCommand::execute(int index) {
 
 
     //create a separate thread for sending values to simulator
-//    myTable->clientTread = thread(&ConnectCommand::runThread, this);
+//    globalMaps->clientTread = thread(&ConnectCommand::runThread, this);
 //    in fly.txt:
 //    connectControlClient("127.0.0.1",5402)
 // index   0                   1         2

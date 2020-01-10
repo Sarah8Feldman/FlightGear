@@ -9,17 +9,27 @@
 #include <vector>
 #include "ExpressionCommand.h"
 
+/**
+ * SleepCommand:
+ * Inherits from Command interface and implements it.
+ **/
 class SleepCommand : public Command {
 private:
     int milliseconds;
+
     vector<string> vecSleep;
+
     string time;
+
     int index;
 
 public:
     SleepCommand(vector<string> vecSleep);
+
     int execute(int index);
+
     bool checkIfValid(vector<string> vecString);
+
     virtual ~SleepCommand();
 
 };

@@ -8,26 +8,31 @@
 #include "Command.h"
 #include "SymbolTable.h"
 
+/**
+ * OpenServerCommand:
+ * Inherits from Command interface and implements it.
+ **/
 class OpenServerCommand : public Command {
 private:
     vector<string> vecOpenServer;
-    string port;
-    mutex myMutex;
 
 public:
+    SymbolTable *globalMaps;
+
     OpenServerCommand(vector<string> vecOpenServer);
+
     int execute(int index);
+
     virtual ~OpenServerCommand();
-    void runThread();
-    string bufferToString(char *buff);
-    vector<double> stringToVector(string str);
-    bool regexMatches(string str);
-    vector<string> regexer(string str, string pattern);
-    void updateMap(vector<double> values);
+
+    void updateMaps(vector<double> values);
 
     void runThread(int client_socket);
 
     vector<double> stringToDoubleVector(string str);
+
+    void updateMapForExpressionInterpreter();
+
 };
 
 

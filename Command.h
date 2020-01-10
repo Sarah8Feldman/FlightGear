@@ -11,6 +11,10 @@
 
 using namespace std;
 
+/**
+ * Command Interface.
+ * The Command class is a interface class that contain execute function that we will run for all the command class.
+ */
 class Command {
 public:
     virtual int execute(int index) = 0;

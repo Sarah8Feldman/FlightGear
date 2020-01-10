@@ -5,41 +5,42 @@
 #include <cstring>
 #include <unistd.h>
 #include <iostream>
-//
-///**
-// * this map updates from the server
-// * @param values vector from the buffer
-// */
-//void SymbolTable::updatePathValue(vector<double> values) {
-//    pthread_mutex_t.lock();
-//
-//    pthread_mutex_t.unlock();
-//}
+SymbolTable* SymbolTable::instance = 0;
+/**
+ * from singleton design pattern- returns an instance of a class
+ * if the instance hasn't been already creates - create a new class
+ * @return
+ */
+SymbolTable* SymbolTable::getInstance() {
+    if (!instance)
+        instance = new SymbolTable;
+    return instance;
+}
 
 /**
- * update the name->path in simulator map
+ * Update the name->path in simulator map.
  * @param name of variable
  * @param path variables path
  */
-void SymbolTable::updateNameToPath(std::__cxx11::string name, std::__cxx11::string path) {
-    pthread_mutex_t.lock();
-    nameToPath[name] = path;
+void SymbolTable::updateNameToPath(string name, string path) {
+    gMutex.lock();
+    nameToPathMap[name] = path;
     //if name isn't in xml
-    if(pathsToValue.count(path) == 0){
-        pathsToValue[path] = 0;
+    if(pathsToValueMap.count(path) == 0 && !(isdigit(path[0]) || path[0] == '-')){
+        pathsToValueMap[path] = 0;
     }
-    pthread_mutex_t.unlock();
+    gMutex.unlock();
 }
 /**
- * update the map of the variables that are not from\in the simulator
+ * Update the map of the variables that are not from\in the simulator.
  * @param name of variable
  * @param val its value
  */
-void SymbolTable::updateVaresWithoutPath(string name, string val){
-    if(nameToPath.count(val) == 0) {
-        varesWithoutPath[name] = val;
+void SymbolTable::updateVaresWithoutPath(string name, string val) {
+    if(nameToPathMap.count(val) == 0) {
+        varsWithoutPathMap[name] = val;
     } else{
-        varesWithoutPath[name] = pathsToValue.at(nameToPath[val]);
+        varsWithoutPathMap[name] = pathsToValueMap.at(nameToPathMap[val]);
     }
 }
 /**
@@ -47,6 +48,3 @@ void SymbolTable::updateVaresWithoutPath(string name, string val){
  */
 SymbolTable::~SymbolTable() {}
 
-//unordered_map<string, Command*> SymbolTable::getCommandMap() {
-//    return *allCommandsrMap;
-//}

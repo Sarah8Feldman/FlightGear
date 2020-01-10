@@ -3,30 +3,36 @@
 //
 #include "WhileCommand.h"
 #include "SymbolTable.h"
+#include "DefineVarCommand.h"
 
 /**
- * This command inrerprates a while loop
- * @param vect1 vector
- * @param index1 index in vector
+ * The While class represent a while loop.
+ * To execute: if the condition is valid execute all of the commands inside the scope.
+ * @param vect1 vector from lexer
  */
 WhileCommand::WhileCommand(vector<string> vect1) {
     this->vect = vect1;
+    globalMaps = SymbolTable::getInstance();
 }
+
 /**
- * checks if the condition is true
+ * This function checks if the condition is true.
+ * @param index of this command in the lexer vector
  * @return true if condition is valid
  */
 bool WhileCommand::checkCondition(int index) {
-    //    if fly.txt
-//    while name < value
-//index 0    1  2  3
+    //    in fly.txt
+//     while name < value
+//index  0    1   2   3
     string left = vect[index + 1];
     string op = vect[index + 2];
     string right = vect[index + 3];
+
     //simplify an expression and return its value
     double leftExp = ExpressionCommand::interpertExpression(left);
     double rightExp = ExpressionCommand::interpertExpression(right);
-    //checks the conditiond
+
+    //checks the condition
     if(op == ">"){
         if( leftExp > rightExp){
             return true;
@@ -59,24 +65,27 @@ bool WhileCommand::checkCondition(int index) {
     }
     return false;
 }
+
 /**
- * if the condition is valid execute all of the commands inside the scope
+ * If the condition is valid execute all of the commands inside the scope.
+ * @param index of this command in the lexer vector
  * @return the next command index
  */
 int WhileCommand::execute(int index) {
     int i = index + 5;
     while (checkCondition(index)) {
-        unordered_map<string, Command*>::iterator it;
-
-        auto vars = myTable->allCommandsMap;
+        auto vars = globalMaps->allCommandsMap;
         //while inside the scope
+        string str = vect[i];
         while (vect[i] != "}") {
-            it = vars.find(vect[i]);
-            if (it != vars.end()){
-                vars.at(vect[i])->execute(i);
+            auto it =  globalMaps->allCommandsMap.find(vect[i]);
+            if (it !=  globalMaps->allCommandsMap.end()){
+                i =  globalMaps->allCommandsMap.at(vect[i])->execute(i);
+            } else {
+                i =  DefineVarCommand(vect).execute(i);
             }
-            i++;
         }
+        i = index + 5;
     }
     return i;
 }

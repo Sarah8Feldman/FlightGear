@@ -8,20 +8,27 @@
 #include "Command.h"
 #include <string>
 #include "Expression.h"
-#include "ex1.h"
+#include "ExpressionInterpreter.h"
 #include <vector>
 #include "ExpressionCommand.h"
 
+/**
+ * PrintCommand:
+ * Inherits from Command interface and implements it.
+ **/
 class PrintCommand : public Command {
 private:
     double value;
-    Expression* exp;
+
     vector<string> vecPrint;
+
     int index;
+
 public:
     PrintCommand(vector<string> vecPrint);
-//    void to_string(string &value);
+
     int execute(int index);
+
     virtual ~PrintCommand();
 };
 

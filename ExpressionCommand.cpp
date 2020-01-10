@@ -6,22 +6,20 @@
 #include "SymbolTable.h"
 
 /**
- * this command simplify an expression
+ * ExpressionCommand class is a constructor.
+ * get instance of singleton class.
+ */
+ExpressionCommand::ExpressionCommand() {
+    globalMaps = SymbolTable::getInstance();
+}
+
+/**
+ * This command simplify an expression
  * @param str string that is the expression
- * @return the expression final value
+ * @return the expression final value (in double)
  */
 double ExpressionCommand::interpertExpression(string str){
-    Interpreter interpreter;
-    auto it = myTable->nameToPath.begin();
-    int i = 0;
-    //set all of the variables from simulator so that the interpreter can use them as variables
-    for (it; it != myTable->nameToPath.end(); it++){
-        string command = it->first + "=" + to_string(myTable->pathsToValue.at(it->second)) + ";";
-        interpreter.setVariables(command);
-
-    }
-    //calculate the expression
-    return interpreter.interpret(str)->calculate();
+    return  SymbolTable::getInstance()->interpreter.interpret(str)->calculate();
 }
 /**
  * destructor

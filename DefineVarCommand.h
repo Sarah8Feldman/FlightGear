@@ -8,20 +8,28 @@
 #include "Command.h"
 #include "SymbolTable.h"
 #include "unordered_map"
-#include "ex1.h"
+#include "ExpressionInterpreter.h"
 #include <string>
 #include "ExpressionCommand.h"
-#include "commandMap.h"
 
+/**
+ * DefineVarCommand:
+ * Inherits from Command interface and implements it.
+ **/
 class DefineVarCommand: public Command{
 private:
     vector<string> vecDefine;
 
 public:
+    SymbolTable *globalMaps;
+
     DefineVarCommand(vector<string> vecDefine);
+
     int execute(int index);
+
     virtual ~DefineVarCommand();
 
+    void updateMapForExpressionInterpreter(string name, string value);
 };
 
 

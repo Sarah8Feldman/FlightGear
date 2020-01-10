@@ -16,40 +16,13 @@ void Lexer::print(vector<string> vect) {
     for (it; it != vect.end(); it++)
         std::cout << *it << ',';
 }
+
 /**
- *
- * @param op operator
- * @return true is char is an operator
- */
-bool Lexer::isOperator(char op) {
-    return (op == '=') || (op == '+') || (op == '-') || (op == '*') ||
-           (op == '/') || (op == '%') || (op == '(') || (op == ')') ||
-           (op == ',') || (op == '{') || (op == '}');
-    }
-/**
- * checks if the 2 chars are an iperator that onclude = : such as => or ==
- * @param op1 char 1
- * @param op2 char 2
- * @return true if is an operator of this kind
- */
-bool Lexer::isEqualOp(char op1, char op2) {
-    return (((op2 == '=') && (op1 == '=')) || (op1 == '!') || (op1 == '<') || (op1 == '>'));
-}
-/**
- * arrows : <- or ->
- * @param op1 char 1
- * @param op2 char 2
- * @return true if is an arrow
- */
-bool Lexer::isArrow(char op1, char op2){
-    return (((op1) == '-' && (op2 == '>')) || (op1 == '<') && (op2 == '-'));
-}
-/**
- * delets all white spases from a string
+ * The expression With Out Spaces function deletes all white spaces from a string
  * @param str string
- * @return string whithout spaces
+ * @return same string without spaces
  */
-string Lexer::expressionWithOutSpaces(std::__cxx11::string str) {
+string Lexer::expressionWithOutSpaces(string str) {
     int i = 0;
     string stringWithOutSpace = "";
     while(i < str.size()){
@@ -61,7 +34,7 @@ string Lexer::expressionWithOutSpaces(std::__cxx11::string str) {
     return stringWithOutSpace;
 }
 /**
- * returnd a vector of matches in a line
+ * return a vector of matches in a line
  * @param str string
  * @return string with spaces between 2 tokens
  */
@@ -73,6 +46,12 @@ vector<string> Lexer::regexMatches(string str) {
     return matches;
 }
 
+/**
+ * The regex function.
+ * @param str our string
+ * @param pattern for regex
+ * @return matches - a vector with all matches
+ */
 vector<string> Lexer::regexer(string str, string pattern) {
     vector<string> matches;
 
@@ -99,65 +78,11 @@ vector<string> Lexer::regexer(string str, string pattern) {
     return matches;
 }
 
-//**
-// * create a vector from single string
-// * @param str string
-// * @return vector from a single string
-// */
-//vector<string> Lexer::splitStringToVector(string str) {
-//    vector<string> vectorWithSpaces;
-//    vector<string>::iterator it;
-//    vector<string> FinalVector;
-//
-//    while(!str.empty())
-//    {
-//        int index = str.find(parser);
-//        //index is not in the end of string
-//        if (index != string::npos) {
-//            string pushStr = str.substr(0, index);
-//            vectorWithSpaces.push_back(pushStr);
-//
-//            str = str.substr(index + parser.size());
-//            if (str.size() == 0)
-//            {
-//                vectorWithSpaces.push_back(str);
-//            }
-//        }
-//        else
-//        {
-//            vectorWithSpaces.push_back(str);
-//            str = "";
-//        }
-//    }
-//    //delete empty values in vector
-//    for (it = vectorWithSpaces.begin(); it != vectorWithSpaces.end(); it++)
-//    {
-//        if (*it != "") {
-//            if (*it != ",") {
-//                FinalVector.push_back(*it);
-//            }
-//        }
-//    }
-//    return FinalVector;
-//}
-//
-///**
-// * create vector from a line
-// * @param str string
-// * @return vector
-// */
-//vector<string> Lexer:: createVectorFromLine(string str) {
-//    vector<string> vec = regexMatches(str);
-//    vector<string> finalVector = splitStringToVector(strWithParser);
-//    print(finalVector);
-//    return finalVector;
-//}
-
 /**
- * read a file - such as fly.txt
+ * Read a file - such as fly.txt
  * create a vector from this file
- * @param fileName
- * @return
+ * @param fileName name of file to read from
+ * @return a vector of all commands and values from this file
  */
 vector<string> Lexer::createVectorFromFile(string fileName) {
     vector<string> tmpVec;
@@ -174,7 +99,16 @@ vector<string> Lexer::createVectorFromFile(string fileName) {
             tmpVec = regexMatches(line);
             for (it = tmpVec.begin(); it != tmpVec.end(); it++)
             {
-                finalVec.push_back(*it);
+                string token = *it;
+                if (token[0] == ' ') {
+                    token = token.substr(1);
+                }
+
+                if (token[token.length() - 1] == ' ') {
+                    token.pop_back();
+                }
+
+                finalVec.push_back(token);
             }
         }
     }

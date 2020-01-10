@@ -5,8 +5,9 @@
 #include "SleepCommand.h"
 #include <chrono>
 #include <thread>
+
 /**
- * this commans sends thread to sleep for a spesific time
+ * This command sends thread to sleep for a specific time.
  * @param vecSleep vector
  * @param index index in vector
  */
@@ -15,7 +16,7 @@ SleepCommand::SleepCommand(vector<string> vecSleep) {
 
 }
 /**
- * check if time is valid string
+ * Check if time is valid string.
  * @param vecString vector
  * @return true if is valid
  */
@@ -30,8 +31,10 @@ bool SleepCommand::checkIfValid(vector<string> vecString) {
         return false;
     }
 }
+
 /**
- *
+ * The execute function.
+ * @param index of this command in the lexer vector
  * @return  the index of the next command
  */
 int SleepCommand::execute(int index) {
